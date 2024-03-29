@@ -51,6 +51,7 @@ object EDHelper {
         var decrypted: String? = ""
         try {
             decrypted = AESHelper.getInstance().decrypt(KEY, encrypted)
+            Log.d(TAG, "decrypted: $decrypted")
         } catch (e: Exception) {
             Log.d(TAG, "Error in encryption\\nError : \" + $e")
         }

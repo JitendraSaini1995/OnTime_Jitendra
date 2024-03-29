@@ -53,7 +53,7 @@ import java.util.Locale
 
 @Composable
 fun HomeScreen(
-    homeScreenRoot: (HomeScreenRoot) -> Unit,
+    homeScreenRoot: (HomeScreenRoot) -> Unit
 ) {
     fun getCurrentTime(): String {
         val currentTime = Calendar.getInstance().time

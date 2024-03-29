@@ -9,6 +9,7 @@ import com.allocate.ontime.business_logic.data.room.DeviceInfoDao
 import com.allocate.ontime.business_logic.data.room.OnTimeDatabase
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.network.DeviceInfoApi
+import com.allocate.ontime.business_logic.network.DeviceSettingApi
 import com.allocate.ontime.business_logic.network.SuperAdminApi
 import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
 import com.allocate.ontime.business_logic.utils.Constants
@@ -55,6 +56,12 @@ object AppModule {
     @Provides
     fun provideSuperAdminApi(@SuperAdminRetrofit retrofit: Retrofit): SuperAdminApi {
         return retrofit.create(SuperAdminApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeviceSettingApi(@SuperAdminRetrofit retrofit: Retrofit): DeviceSettingApi {
+        return retrofit.create(DeviceSettingApi::class.java)
     }
 
     @Provides
