@@ -37,13 +37,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.allocate.ontime.R
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.utils.Constants
 import com.allocate.ontime.business_logic.utils.OnTimeColors
-import com.allocate.ontime.business_logic.viewmodel.MainViewModel
-import com.allocate.ontime.business_logic.viewmodel.home.HomeViewModel
 import com.allocate.ontime.presentation_logic.navigation.HomeScreenRoot
 import com.allocate.ontime.presentation_logic.theme.dimens
 import com.allocate.ontime.presentation_logic.screens.login.PinEntryDialog

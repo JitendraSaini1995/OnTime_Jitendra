@@ -13,6 +13,7 @@ import com.allocate.ontime.business_logic.network.DeviceSettingApi
 import com.allocate.ontime.business_logic.network.SuperAdminApi
 import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
 import com.allocate.ontime.business_logic.utils.Constants
+import com.allocate.ontime.business_logic.utils.DeviceUtility
 import com.allocate.ontime.business_logic.viewmodel.MainViewModel
 import dagger.Module
 import dagger.Provides
@@ -34,8 +35,20 @@ object AppModule {
     }
     @Singleton
     @Provides
-    fun provideMainViewModel(repository: DeviceInfoRepository, @ApplicationContext context: Context): MainViewModel =
-        MainViewModel(repository, context)
+    fun provideMainViewModel(
+       repository: DeviceInfoRepository,
+       @ApplicationContext context: Context
+    ): MainViewModel  = MainViewModel(repository,context)
+
+    @Provides
+    fun provideDeviceInfoRepository(
+        deviceInfoApi: DeviceInfoApi,
+        superAdminApi: SuperAdminApi,
+        deviceUtility: DeviceUtility,
+        deviceSettingApi: DeviceSettingApi,
+        @ApplicationContext context: Context
+    ): DeviceInfoRepository =
+        DeviceInfoRepository(deviceInfoApi, superAdminApi, deviceUtility, deviceSettingApi, context)
 
     // It provides the dependency of OnTimeDatabase Class.
     @Singleton
