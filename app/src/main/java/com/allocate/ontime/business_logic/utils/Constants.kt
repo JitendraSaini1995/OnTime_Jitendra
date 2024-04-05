@@ -11,6 +11,7 @@ object Constants {
       const val AS_API_URL = "ASApiURL"
       const val DEVICE_ID = "DeviceId"
       const val TIME_STAMP = "TimeStamp"
+      const val DEVICE_SETTING_DATA = "DeviceSettingData"
 }
 
 

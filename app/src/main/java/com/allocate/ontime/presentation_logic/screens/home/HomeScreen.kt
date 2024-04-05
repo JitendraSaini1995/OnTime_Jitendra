@@ -1,6 +1,5 @@
 package com.allocate.ontime.presentation_logic.screens.home
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -71,9 +70,8 @@ fun HomeScreen(
 
     val userName = SecureSharedPrefs(context).getData(Constants.USER_NAME, "")
     val password = SecureSharedPrefs(context).getData(Constants.PASSWORD, "")
-
     val asApiUrl = SecureSharedPrefs(context).getData(Constants.AS_API_URL, "")
-    Log.d("asApiUrl",asApiUrl)
+    val deviceSettingData = SecureSharedPrefs(context).getData(Constants.DEVICE_SETTING_DATA, "")
 
 
     Surface(

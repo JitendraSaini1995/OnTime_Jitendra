@@ -65,11 +65,14 @@ class MainViewModel @Inject constructor(
                 if (deviceSettingApiData.data?.isSuccessful == true) {
                     val data = deviceSettingApiData.data!!.body()?.data
                     val decryptedData = edHelper.decrypt(data.toString())
+                    val deviceSettingJsonString = Gson().toJson(decryptedData)
+                    SecureSharedPrefs(context).saveData(
+                        Constants.DEVICE_SETTING_DATA, deviceSettingJsonString
+                    )
                     val response = Gson().fromJson(decryptedData, DeviceSettingResponse::class.java)
                     Log.d(TAG, "response : $response")
                     val timeStamp = response.ResponsePacket.TimeStamp
                     Log.d(TAG, "timeStamp : $timeStamp")
-                    Log.d(TAG, "startApi method called from main viewmodel..")
                     SecureSharedPrefs(context).saveData(
                         Constants.TIME_STAMP, timeStamp.toString()
                     )
