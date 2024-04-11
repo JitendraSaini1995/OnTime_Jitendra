@@ -1,10 +1,8 @@
-package com.allocate.ontime.business_logic.viewmodel
+package com.allocate.ontime.business_logic.api_manager
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
@@ -18,23 +16,24 @@ import com.allocate.ontime.encryption.EDModel
 import com.allocate.ontime.presentation_logic.model.DeviceSettingResponse
 import com.allocate.ontime.presentation_logic.model.SuperAdminResponse
 import com.google.gson.Gson
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-@HiltViewModel
-@SuppressLint("StaticFieldLeak")
-class MainViewModel @Inject constructor(
-    private val repository: DeviceInfoRepository, @ApplicationContext private val context: Context
-) : ViewModel() {
+class ApiManager @Inject constructor(
+    private val repository: DeviceInfoRepository,
+    @ApplicationContext private val context: Context,
+     private val scope: CoroutineScope
+) {
 
-    private val TAG = "MainViewModel"
+    private val TAG = "ApiManager"
 
     fun fetchSuperAdminDetails() {
-        viewModelScope.launch {
+        scope.launch(Dispatchers.IO) {
             val result = repository.postSuperAdminDetails()
             Log.d(TAG, "result : $result")
             if (result.data != null) {
@@ -58,7 +57,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun fetchDeviceSettingDetails() {
-        viewModelScope.launch {
+        scope.launch(Dispatchers.IO)  {
             val deviceSettingApiData = async { repository.postDeviceSettingDetails() }.await()
             if (deviceSettingApiData.data != null) {
                 val edHelper = com.allocate.ontime.encryption.EDHelper

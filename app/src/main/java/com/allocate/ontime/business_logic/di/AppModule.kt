@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.allocate.ontime.BuildConfig
 import com.allocate.ontime.business_logic.annotations.DeviceInfoRetrofit
 import com.allocate.ontime.business_logic.annotations.SuperAdminRetrofit
+import com.allocate.ontime.business_logic.api_manager.ApiManager
 import com.allocate.ontime.business_logic.data.room.DeviceInfoDao
 import com.allocate.ontime.business_logic.data.room.OnTimeDatabase
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
@@ -13,13 +14,14 @@ import com.allocate.ontime.business_logic.network.DeviceSettingApi
 import com.allocate.ontime.business_logic.network.SuperAdminApi
 import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
 import com.allocate.ontime.business_logic.utils.Constants
-import com.allocate.ontime.business_logic.utils.DeviceUtility
-import com.allocate.ontime.business_logic.viewmodel.MainViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -33,22 +35,19 @@ object AppModule {
     fun provideDeviceInfoDaoRepository(database: OnTimeDatabase): DeviceInfoDao {
         return database.deviceInfoDao()
     }
-    @Singleton
-    @Provides
-    fun provideMainViewModel(
-       repository: DeviceInfoRepository,
-       @ApplicationContext context: Context
-    ): MainViewModel  = MainViewModel(repository,context)
 
     @Provides
-    fun provideDeviceInfoRepository(
-        deviceInfoApi: DeviceInfoApi,
-        superAdminApi: SuperAdminApi,
-        deviceUtility: DeviceUtility,
-        deviceSettingApi: DeviceSettingApi,
-        @ApplicationContext context: Context
-    ): DeviceInfoRepository =
-        DeviceInfoRepository(deviceInfoApi, superAdminApi, deviceUtility, deviceSettingApi, context)
+    @Singleton
+    fun provideCoroutineScope(): CoroutineScope {
+        return CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    }
+
+    @Provides
+    fun provideApiManager(
+        repository: DeviceInfoRepository,
+        @ApplicationContext context: Context,
+        scope: CoroutineScope
+    ): ApiManager = ApiManager(repository,context, scope)
 
     // It provides the dependency of OnTimeDatabase Class.
     @Singleton

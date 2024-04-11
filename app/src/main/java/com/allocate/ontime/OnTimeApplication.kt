@@ -4,10 +4,9 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.allocate.ontime.business_logic.viewmodel.MainViewModel
+import com.allocate.ontime.business_logic.api_manager.ApiManager
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
-
 
 @HiltAndroidApp
 class OnTimeApplication : Application() {
@@ -21,6 +20,6 @@ class OnTimeApplication : Application() {
             this,
             Configuration.Builder().setWorkerFactory(hiltWorkerFactory).build()
         )
-        MainViewModel.startPeriodicWork(this)
+        ApiManager.startPeriodicWork(this)
     }
 }
