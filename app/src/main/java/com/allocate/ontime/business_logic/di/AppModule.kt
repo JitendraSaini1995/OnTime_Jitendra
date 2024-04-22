@@ -8,10 +8,13 @@ import com.allocate.ontime.business_logic.annotations.SuperAdminRetrofit
 import com.allocate.ontime.business_logic.api_manager.ApiManager
 import com.allocate.ontime.business_logic.data.room.DeviceInfoDao
 import com.allocate.ontime.business_logic.data.room.OnTimeDatabase
+import com.allocate.ontime.business_logic.data.room.SiteJobDao
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.network.DeviceInfoApi
 import com.allocate.ontime.business_logic.network.DeviceSettingApi
+import com.allocate.ontime.business_logic.network.SiteJobListApi
 import com.allocate.ontime.business_logic.network.SuperAdminApi
+import com.allocate.ontime.business_logic.repository.DaoRepository
 import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
 import com.allocate.ontime.business_logic.utils.Constants
 import dagger.Module
@@ -37,6 +40,11 @@ object AppModule {
     }
 
     @Provides
+    fun provideSiteJobDaoRepository(database: OnTimeDatabase): SiteJobDao {
+        return database.siteJobDao()
+    }
+
+    @Provides
     @Singleton
     fun provideCoroutineScope(): CoroutineScope {
         return CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -45,9 +53,10 @@ object AppModule {
     @Provides
     fun provideApiManager(
         repository: DeviceInfoRepository,
+        daoRepository: DaoRepository,
         @ApplicationContext context: Context,
         scope: CoroutineScope
-    ): ApiManager = ApiManager(repository,context, scope)
+    ): ApiManager = ApiManager(repository,daoRepository,context, scope)
 
     // It provides the dependency of OnTimeDatabase Class.
     @Singleton
@@ -74,6 +83,12 @@ object AppModule {
     @Provides
     fun provideDeviceSettingApi(@SuperAdminRetrofit retrofit: Retrofit): DeviceSettingApi {
         return retrofit.create(DeviceSettingApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSiteJobListApi(@SuperAdminRetrofit retrofit: Retrofit): SiteJobListApi {
+        return retrofit.create(SiteJobListApi::class.java)
     }
 
     @Provides

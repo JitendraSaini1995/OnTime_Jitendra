@@ -5,6 +5,7 @@ object Constants {
       const val GET_CI_SUPER_ADMIN_DETAILS = "EmployeeAPI/GetAppManageUser"
       const val EDIT_DEVICE_INFO_URL_ENDPOINT = "editDeviceAppData"
       const val DEVICE_SETTING_URL_ENDPOINT = "Setting/AppDeviceSetting"
+      const val GET_SITE_JOB_LIST = "EmployeeAPI/SiteJobList"
       const val DEFAULT_AS_API_URL = "http://airstack.sublimitysoft.com/AirstackAPI/API/"
       const val USER_NAME = "UserName"
       const val PASSWORD = "Password"

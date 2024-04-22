@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -225,7 +226,6 @@ fun SuperAdminScreen(
                         color = OnTimeColors.White,
                         style = MaterialTheme.typography.titleLarge
                     )
-
                 }
                 Column(
                     verticalArrangement = Arrangement.Center,

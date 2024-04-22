@@ -1,5 +1,6 @@
 package com.allocate.ontime.presentation_logic.screens.home
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +24,9 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -58,7 +61,7 @@ fun HomeScreen(
     }
 
     var isDialogVisible by remember { mutableStateOf(false) }
-    var currentTime by remember { mutableStateOf(getCurrentTime()) }
+    val currentTime by remember { mutableStateOf(getCurrentTime()) }
     val context = LocalContext.current
     if (isDialogVisible) {
         PinEntryDialog(onDismiss = {
@@ -68,10 +71,10 @@ fun HomeScreen(
         })
     }
 
-    val userName = SecureSharedPrefs(context).getData(Constants.USER_NAME, "")
-    val password = SecureSharedPrefs(context).getData(Constants.PASSWORD, "")
-    val asApiUrl = SecureSharedPrefs(context).getData(Constants.AS_API_URL, "")
-    val deviceSettingData = SecureSharedPrefs(context).getData(Constants.DEVICE_SETTING_DATA, "")
+//    val userName = SecureSharedPrefs(context).getData(Constants.USER_NAME, "")
+//    val password = SecureSharedPrefs(context).getData(Constants.PASSWORD, "")
+//    val asApiUrl = SecureSharedPrefs(context).getData(Constants.AS_API_URL, "")
+//    val deviceSettingData = SecureSharedPrefs(context).getData(Constants.DEVICE_SETTING_DATA, "")
 
 
     Surface(
@@ -183,6 +186,9 @@ fun HomeScreen(
                     ) {
                         Button(
                             onClick = {
+                                Log.d("jitu","Button Clicked")
+                                val startTime  =  mutableLongStateOf(System.currentTimeMillis())
+                                Log.d("jitu","start time : $startTime")
                                 homeScreenRoot(HomeScreenRoot.AdminScreen)
                             },
                             shape = RectangleShape,

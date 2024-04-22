@@ -57,7 +57,6 @@ fun AdminScreen(
     adminViewModel: AdminViewModel = hiltViewModel(),
 ) {
     val TAG = "AdminScreen"
-
     var isDialogVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
     if (isDialogVisible) {

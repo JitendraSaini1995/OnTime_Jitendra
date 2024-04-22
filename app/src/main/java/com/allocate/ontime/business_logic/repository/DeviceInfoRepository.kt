@@ -7,6 +7,7 @@ import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPr
 import com.allocate.ontime.presentation_logic.model.DeviceInfo
 import com.allocate.ontime.business_logic.network.DeviceInfoApi
 import com.allocate.ontime.business_logic.network.DeviceSettingApi
+import com.allocate.ontime.business_logic.network.SiteJobListApi
 import com.allocate.ontime.business_logic.network.SuperAdminApi
 import com.allocate.ontime.business_logic.utils.Constants
 import com.allocate.ontime.business_logic.utils.DeviceUtility
@@ -14,6 +15,7 @@ import com.allocate.ontime.encryption.EDModel
 import com.allocate.ontime.presentation_logic.model.AppInfo
 import com.allocate.ontime.presentation_logic.model.DeviceSettingInfo
 import com.allocate.ontime.presentation_logic.model.EditDeviceInfo
+import com.allocate.ontime.presentation_logic.model.SiteJobListRequest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.Response
 import javax.inject.Inject
@@ -23,6 +25,7 @@ class DeviceInfoRepository @Inject constructor(
     private val superAdminApi: SuperAdminApi,
     private val deviceUtility: DeviceUtility,
     private val deviceSettingApi: DeviceSettingApi,
+    private val siteJobListApi: SiteJobListApi,
     @ApplicationContext private val context: Context
 ) {
     companion object {
@@ -85,6 +88,25 @@ class DeviceInfoRepository @Inject constructor(
         } catch (exception: Exception) {
             dataOrException.e = exception
             Log.e(TAG, "getCIDeviceSettingDetails: ${dataOrException.e}")
+        }
+        return dataOrException
+    }
+
+    suspend fun postSiteJobList(): DataOrException<Response<EDModel>, Exception> {
+        val dataOrException = DataOrException<Response<EDModel>, Exception>()
+        val timeStamp: String = SecureSharedPrefs(context).getData(
+            Constants.TIME_STAMP,
+            "0"
+        )
+        val siteJobListRequest = SiteJobListRequest(0,timeStamp.toLong())
+        val encryptedSiteJobList = EDModel("").encryptDeviceInfo(siteJobListRequest)
+        try {
+            dataOrException.data =
+                siteJobListApi.getSiteJobList(encryptedSiteJobList)
+            Log.i(TAG, "getSiteJobList : ${dataOrException.data}")
+        } catch (exception: Exception) {
+            dataOrException.e = exception
+            Log.e(TAG, "getSiteJobList: ${dataOrException.e}")
         }
         return dataOrException
     }

@@ -18,10 +18,13 @@ class WorkChainWorker(
             val superAdminWorkerRequest = OneTimeWorkRequestBuilder<SuperAdminWorker>().build()
             val deviceSettingWorkerRequest =
                 OneTimeWorkRequestBuilder<DeviceSettingWorker>().build()
+            val siteJobListWorkerRequest =
+                OneTimeWorkRequestBuilder<SiteJobListWorker>().build()
 
             WorkManager.getInstance(applicationContext)
                 .beginWith(superAdminWorkerRequest)
                 .then(deviceSettingWorkerRequest)
+                .then(siteJobListWorkerRequest)
                 .enqueue()
 
             Result.success()
