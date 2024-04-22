@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.allocate.ontime.BuildConfig
 import com.allocate.ontime.business_logic.data.DataOrException
 import com.allocate.ontime.business_logic.data.room.DeviceInformation
+import com.allocate.ontime.business_logic.data.room.Job
+import com.allocate.ontime.business_logic.data.room.Site
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.repository.DaoRepository
 import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
@@ -15,6 +17,9 @@ import com.allocate.ontime.business_logic.utils.Constants
 import com.allocate.ontime.business_logic.utils.DeviceUtility
 import com.allocate.ontime.presentation_logic.model.AppInfo
 import com.allocate.ontime.presentation_logic.model.DeviceInfo
+import com.allocate.ontime.presentation_logic.model.DeviceSettingResponse
+import com.allocate.ontime.presentation_logic.model.SiteJobResponse
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -37,11 +42,16 @@ class SplashViewModel @Inject constructor(
 
     private val _acknowledgementStatus = MutableStateFlow(0)
     val acknowledgementStatus = _acknowledgementStatus.asStateFlow()
+
     companion object {
         const val TAG = "SplashViewModel"
     }
 
     init {
+        startApiCall()
+    }
+
+    private fun startApiCall() {
         viewModelScope.launch(Dispatchers.IO) {
             val deviceInfoApiData = async { repository.getDeviceInfo(context) }.await()
             Log.i(TAG, "deviceInfoApiData : success")
@@ -50,6 +60,10 @@ class SplashViewModel @Inject constructor(
                 SecureSharedPrefs(context).saveData(
                     Constants.AS_API_URL,
                     data.ASApiURL
+                )
+                SecureSharedPrefs(context).saveData(
+                    Constants.DEVICE_ID,
+                    data.DeviceId.toString()
                 )
                 addDeviceInfo(
                     deviceInformation = DeviceInformation(
@@ -142,8 +156,10 @@ class SplashViewModel @Inject constructor(
     }
 
     private suspend fun addDeviceInfo(deviceInformation: DeviceInformation) =
-        viewModelScope.launch(Dispatchers.IO) { daoRepository.addDeviceInfo(deviceInformation) }
+        viewModelScope.launch(Dispatchers.IO) {
+            async { daoRepository.addDeviceInfo(deviceInformation)  }.await() }
 
     private suspend fun updateDeviceInfo(deviceInformation: DeviceInformation) =
-        viewModelScope.launch(Dispatchers.IO) { daoRepository.updateDeviceInfo(deviceInformation) }
+        viewModelScope.launch(Dispatchers.IO) {
+           async { daoRepository.updateDeviceInfo(deviceInformation) }.await()  }
 }

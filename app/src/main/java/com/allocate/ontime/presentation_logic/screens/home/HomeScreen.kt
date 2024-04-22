@@ -24,7 +24,9 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,13 +39,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.allocate.ontime.R
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.utils.Constants
 import com.allocate.ontime.business_logic.utils.OnTimeColors
-import com.allocate.ontime.business_logic.viewmodel.MainViewModel
-import com.allocate.ontime.business_logic.viewmodel.home.HomeViewModel
 import com.allocate.ontime.presentation_logic.navigation.HomeScreenRoot
 import com.allocate.ontime.presentation_logic.theme.dimens
 import com.allocate.ontime.presentation_logic.screens.login.PinEntryDialog
@@ -53,7 +52,7 @@ import java.util.Locale
 
 @Composable
 fun HomeScreen(
-    homeScreenRoot: (HomeScreenRoot) -> Unit,
+    homeScreenRoot: (HomeScreenRoot) -> Unit
 ) {
     fun getCurrentTime(): String {
         val currentTime = Calendar.getInstance().time
@@ -62,7 +61,7 @@ fun HomeScreen(
     }
 
     var isDialogVisible by remember { mutableStateOf(false) }
-    var currentTime by remember { mutableStateOf(getCurrentTime()) }
+    val currentTime by remember { mutableStateOf(getCurrentTime()) }
     val context = LocalContext.current
     if (isDialogVisible) {
         PinEntryDialog(onDismiss = {
@@ -72,11 +71,10 @@ fun HomeScreen(
         })
     }
 
-    val userName = SecureSharedPrefs(context).getData(Constants.USER_NAME, "")
-    val password = SecureSharedPrefs(context).getData(Constants.PASSWORD, "")
-
-    val asApiUrl = SecureSharedPrefs(context).getData(Constants.AS_API_URL, "")
-    Log.d("asApiUrl",asApiUrl)
+//    val userName = SecureSharedPrefs(context).getData(Constants.USER_NAME, "")
+//    val password = SecureSharedPrefs(context).getData(Constants.PASSWORD, "")
+//    val asApiUrl = SecureSharedPrefs(context).getData(Constants.AS_API_URL, "")
+//    val deviceSettingData = SecureSharedPrefs(context).getData(Constants.DEVICE_SETTING_DATA, "")
 
 
     Surface(
@@ -188,6 +186,9 @@ fun HomeScreen(
                     ) {
                         Button(
                             onClick = {
+                                Log.d("jitu","Button Clicked")
+                                val startTime  =  mutableLongStateOf(System.currentTimeMillis())
+                                Log.d("jitu","start time : $startTime")
                                 homeScreenRoot(HomeScreenRoot.AdminScreen)
                             },
                             shape = RectangleShape,
