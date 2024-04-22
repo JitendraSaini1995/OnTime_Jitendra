@@ -17,6 +17,9 @@ import com.allocate.ontime.presentation_logic.model.DeviceSettingInfo
 import com.allocate.ontime.presentation_logic.model.EditDeviceInfo
 import com.allocate.ontime.presentation_logic.model.SiteJobListRequest
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -26,6 +29,7 @@ class DeviceInfoRepository @Inject constructor(
     private val deviceUtility: DeviceUtility,
     private val deviceSettingApi: DeviceSettingApi,
     private val siteJobListApi: SiteJobListApi,
+    private val daoRepository: DaoRepository,
     @ApplicationContext private val context: Context
 ) {
     companion object {
@@ -94,12 +98,9 @@ class DeviceInfoRepository @Inject constructor(
 
     suspend fun postSiteJobList(): DataOrException<Response<EDModel>, Exception> {
         val dataOrException = DataOrException<Response<EDModel>, Exception>()
-        val timeStamp: String = SecureSharedPrefs(context).getData(
-            Constants.TIME_STAMP,
-            "0"
-        )
-        val siteJobListRequest = SiteJobListRequest(0,timeStamp.toLong())
+        val siteJobListRequest = SiteJobListRequest(0,daoRepository.getSiteTimestamp() ?: 0)
         val encryptedSiteJobList = EDModel("").encryptDeviceInfo(siteJobListRequest)
+        Log.i(TAG, "encryptedSiteJobList : $encryptedSiteJobList")
         try {
             dataOrException.data =
                 siteJobListApi.getSiteJobList(encryptedSiteJobList)
@@ -110,4 +111,5 @@ class DeviceInfoRepository @Inject constructor(
         }
         return dataOrException
     }
+
 }

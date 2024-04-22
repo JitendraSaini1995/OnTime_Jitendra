@@ -24,6 +24,9 @@ class DaoRepository @Inject constructor(
     suspend fun addJobList(job: Job) =
         siteJobDao.insertJob(job)
 
+    suspend fun getSiteTimestamp() =
+        siteJobDao.getSiteTimestamp()
+
     suspend fun updateDeviceInfo(deviceInformation: DeviceInformation) =
         deviceInfoDao.update(deviceInformation)
 

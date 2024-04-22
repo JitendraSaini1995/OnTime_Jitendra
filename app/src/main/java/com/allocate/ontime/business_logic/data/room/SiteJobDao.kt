@@ -16,6 +16,9 @@ interface SiteJobDao {
     @Upsert
     suspend fun insertJob(job: Job)
 
+    @Query("Select timestamp from site_list Order by timestamp desc limit 1")
+    suspend fun getSiteTimestamp(): Long?
+
     @Update
     suspend fun updateSite(site: Site)
 

@@ -156,8 +156,10 @@ class SplashViewModel @Inject constructor(
     }
 
     private suspend fun addDeviceInfo(deviceInformation: DeviceInformation) =
-        viewModelScope.launch(Dispatchers.IO) { daoRepository.addDeviceInfo(deviceInformation) }
+        viewModelScope.launch(Dispatchers.IO) {
+            async { daoRepository.addDeviceInfo(deviceInformation)  }.await() }
 
     private suspend fun updateDeviceInfo(deviceInformation: DeviceInformation) =
-        viewModelScope.launch(Dispatchers.IO) { daoRepository.updateDeviceInfo(deviceInformation) }
+        viewModelScope.launch(Dispatchers.IO) {
+           async { daoRepository.updateDeviceInfo(deviceInformation) }.await()  }
 }

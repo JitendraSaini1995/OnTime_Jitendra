@@ -93,7 +93,7 @@ class ApiManager @Inject constructor(
     fun fetchAndSaveSiteJobList() {
         scope.launch(Dispatchers.IO) {
             val siteJobData = async { repository.postSiteJobList() }.await()
-            Log.d(SplashViewModel.TAG, "siteJobData : $siteJobData")
+            Log.d(TAG, "siteJobData : $siteJobData")
             if (siteJobData.data != null) {
                 val edHelper = com.allocate.ontime.encryption.EDHelper
                 if (siteJobData.data?.isSuccessful == true) {
