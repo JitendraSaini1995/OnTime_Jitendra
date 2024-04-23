@@ -1,11 +1,11 @@
 package com.allocate.ontime.business_logic.repository
 
 
-import com.allocate.ontime.business_logic.data.room.DeviceInfoDao
-import com.allocate.ontime.business_logic.data.room.DeviceInformation
-import com.allocate.ontime.business_logic.data.room.Job
-import com.allocate.ontime.business_logic.data.room.Site
-import com.allocate.ontime.business_logic.data.room.SiteJobDao
+import com.allocate.ontime.business_logic.data.room.dao.DeviceInfoDao
+import com.allocate.ontime.business_logic.data.room.entities.DeviceInformation
+import com.allocate.ontime.business_logic.data.room.entities.Job
+import com.allocate.ontime.business_logic.data.room.entities.Site
+import com.allocate.ontime.business_logic.data.room.dao.SiteJobDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn

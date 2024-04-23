@@ -3,21 +3,18 @@ package com.allocate.ontime.business_logic.api_manager
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.allocate.ontime.business_logic.api_worker.WorkChainWorker
-import com.allocate.ontime.business_logic.data.room.DeviceInformation
-import com.allocate.ontime.business_logic.data.room.Job
-import com.allocate.ontime.business_logic.data.room.Site
+import com.allocate.ontime.business_logic.data.room.entities.Job
+import com.allocate.ontime.business_logic.data.room.entities.Site
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.repository.DaoRepository
 import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
 import com.allocate.ontime.business_logic.utils.Constants
-import com.allocate.ontime.business_logic.viewmodel.splash.SplashViewModel
 import com.allocate.ontime.encryption.EDModel
 import com.allocate.ontime.presentation_logic.model.DeviceSettingResponse
 import com.allocate.ontime.presentation_logic.model.SiteJobResponse
@@ -113,13 +110,15 @@ class ApiManager @Inject constructor(
                             Major = site.Major,
                             IsBeaconRequired = site.IsBeaconRequired,
                             timestamp = site.timestamp
-                        ))
+                        )
+                        )
                         site.JobList.forEach {job->
                             addJobList(job = Job(
                                 JobId = job.JobId.toLong(),
                                 JobName = job.JobName,
                                 SiteId = site.Id.toLong()
-                            ))
+                            )
+                            )
                         }
                     }
                 }

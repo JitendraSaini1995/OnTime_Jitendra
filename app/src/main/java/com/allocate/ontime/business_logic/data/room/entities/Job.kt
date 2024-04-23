@@ -1,4 +1,4 @@
-package com.allocate.ontime.business_logic.data.room
+package com.allocate.ontime.business_logic.data.room.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

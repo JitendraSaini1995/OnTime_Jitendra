@@ -6,9 +6,9 @@ import com.allocate.ontime.BuildConfig
 import com.allocate.ontime.business_logic.annotations.DeviceInfoRetrofit
 import com.allocate.ontime.business_logic.annotations.SuperAdminRetrofit
 import com.allocate.ontime.business_logic.api_manager.ApiManager
-import com.allocate.ontime.business_logic.data.room.DeviceInfoDao
+import com.allocate.ontime.business_logic.data.room.dao.DeviceInfoDao
 import com.allocate.ontime.business_logic.data.room.OnTimeDatabase
-import com.allocate.ontime.business_logic.data.room.SiteJobDao
+import com.allocate.ontime.business_logic.data.room.dao.SiteJobDao
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.network.DeviceInfoApi
 import com.allocate.ontime.business_logic.network.DeviceSettingApi

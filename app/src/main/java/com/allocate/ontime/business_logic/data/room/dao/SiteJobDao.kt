@@ -1,9 +1,11 @@
-package com.allocate.ontime.business_logic.data.room
+package com.allocate.ontime.business_logic.data.room.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
+import com.allocate.ontime.business_logic.data.room.entities.Job
+import com.allocate.ontime.business_logic.data.room.entities.Site
 import kotlinx.coroutines.flow.Flow
 
 @Dao
