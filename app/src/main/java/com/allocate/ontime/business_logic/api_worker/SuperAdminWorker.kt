@@ -8,6 +8,7 @@ import com.allocate.ontime.business_logic.api_manager.ApiManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 @HiltWorker
@@ -28,3 +29,25 @@ class SuperAdminWorker @AssistedInject constructor(
         }
     }
 }
+
+//@HiltWorker
+//class SuperAdminWorker @AssistedInject constructor(
+//    @Assisted context: Context,
+//    @Assisted params: WorkerParameters,
+//    private val apiManager: ApiManager
+//) : CoroutineWorker(context, params) {
+//
+//    override suspend fun doWork(): Result {
+//        return withContext(Dispatchers.IO){
+//            try {
+//               async {  apiManager.fetchSuperAdminDetails() }.await()
+//                async {  apiManager.fetchDeviceSettingDetails() }.await()
+//                async {    apiManager.fetchAndSaveSiteJobList() }.await()
+//                async { apiManager.fetchAndSaveEmployee() }.await()
+//                Result.success()
+//            } catch (e: Exception) {
+//                Result.failure()
+//            }
+//        }
+//    }
+//}

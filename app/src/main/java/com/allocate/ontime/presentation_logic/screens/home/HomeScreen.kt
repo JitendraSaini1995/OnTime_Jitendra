@@ -1,8 +1,11 @@
 package com.allocate.ontime.presentation_logic.screens.home
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,7 +27,6 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,20 +41,29 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.allocate.ontime.R
-import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
-import com.allocate.ontime.business_logic.utils.Constants
+import com.allocate.ontime.business_logic.api_worker.SuperAdminWorker
+import com.allocate.ontime.business_logic.api_worker.WorkChainWorker
 import com.allocate.ontime.business_logic.utils.OnTimeColors
+import com.allocate.ontime.business_logic.viewmodel.splash.SplashViewModel
 import com.allocate.ontime.presentation_logic.navigation.HomeScreenRoot
 import com.allocate.ontime.presentation_logic.theme.dimens
 import com.allocate.ontime.presentation_logic.screens.login.PinEntryDialog
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+
+@SuppressLint("EnqueueWork")
 @Composable
 fun HomeScreen(
-    homeScreenRoot: (HomeScreenRoot) -> Unit
+    homeScreenRoot: (HomeScreenRoot) -> Unit,
+    splashViewModel: SplashViewModel = hiltViewModel(),
 ) {
     fun getCurrentTime(): String {
         val currentTime = Calendar.getInstance().time
@@ -75,7 +86,6 @@ fun HomeScreen(
 //    val password = SecureSharedPrefs(context).getData(Constants.PASSWORD, "")
 //    val asApiUrl = SecureSharedPrefs(context).getData(Constants.AS_API_URL, "")
 //    val deviceSettingData = SecureSharedPrefs(context).getData(Constants.DEVICE_SETTING_DATA, "")
-
 
     Surface(
         modifier = Modifier
@@ -102,14 +112,23 @@ fun HomeScreen(
                 ) {
                     RadioButton(
                         selected = true,
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            WorkManager.getInstance(context).cancelUniqueWork("ApiChainWorker")
+                            splashViewModel.chainingApiCalling()
+                            WorkChainWorker.startPeriodicWork(context)
+                        },
                         colors = RadioButtonDefaults.colors(selectedColor = OnTimeColors.PORT_GORE)
                     )
                     Text(
                         text = currentTime,
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
-                        color = OnTimeColors.PORT_GORE
+                        color = OnTimeColors.PORT_GORE,
+                        modifier = Modifier.clickable {
+                            WorkManager.getInstance(context).cancelUniqueWork("ApiChainWorker")
+                            splashViewModel.chainingApiCalling()
+                            WorkChainWorker.startPeriodicWork(context)
+                        }
                     )
                 }
                 Image(
@@ -186,9 +205,9 @@ fun HomeScreen(
                     ) {
                         Button(
                             onClick = {
-                                Log.d("jitu","Button Clicked")
-                                val startTime  =  mutableLongStateOf(System.currentTimeMillis())
-                                Log.d("jitu","start time : $startTime")
+                                Log.d("jitu", "Button Clicked")
+                                val startTime = mutableLongStateOf(System.currentTimeMillis())
+                                Log.d("jitu", "start time : $startTime")
                                 homeScreenRoot(HomeScreenRoot.AdminScreen)
                             },
                             shape = RectangleShape,
@@ -204,6 +223,7 @@ fun HomeScreen(
                         Spacer(modifier = Modifier.width(MaterialTheme.dimens.spacerW15))
                         Button(
                             onClick = {
+                                Log.d("jitu", "Button Clicked")
                                 homeScreenRoot(HomeScreenRoot.SuperAdminScreen)
                             },
                             shape = RectangleShape,
@@ -261,6 +281,7 @@ fun HomeScreen(
             }
         }
     }
+
 }
 
 

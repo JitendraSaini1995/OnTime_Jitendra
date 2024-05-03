@@ -6,17 +6,21 @@ import android.util.Log
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.allocate.ontime.business_logic.api_worker.WorkChainWorker
+import com.allocate.ontime.business_logic.data.room.entities.EmployeePacket
 import com.allocate.ontime.business_logic.data.room.entities.Job
 import com.allocate.ontime.business_logic.data.room.entities.Site
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.repository.DaoRepository
 import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
 import com.allocate.ontime.business_logic.utils.Constants
+import com.allocate.ontime.business_logic.viewmodel.splash.SplashViewModel
 import com.allocate.ontime.encryption.EDModel
 import com.allocate.ontime.presentation_logic.model.DeviceSettingResponse
+import com.allocate.ontime.presentation_logic.model.EmployeeResponse
 import com.allocate.ontime.presentation_logic.model.SiteJobResponse
 import com.allocate.ontime.presentation_logic.model.SuperAdminResponse
 import com.google.gson.Gson
@@ -36,6 +40,15 @@ class ApiManager @Inject constructor(
 ) {
 
     private val TAG = "ApiManager"
+
+   fun startApiCalling(){
+       scope.launch(Dispatchers.IO) {
+           async { fetchSuperAdminDetails() }.await()
+           async { fetchDeviceSettingDetails() }.await()
+           async { fetchAndSaveSiteJobList() }.await()
+           async { fetchAndSaveEmployee() }.await()
+       }
+    }
 
     fun fetchSuperAdminDetails() {
         scope.launch(Dispatchers.IO) {
@@ -100,24 +113,26 @@ class ApiManager @Inject constructor(
                     Log.d(TAG, "decryptedData : $decryptedData")
                     val response = Gson().fromJson(decryptedData, SiteJobResponse::class.java)
                     Log.d(TAG, "response : $response")
-                    response.ResponsePacket.forEach { site->
-                        addSiteList(site = Site(
-                            Id = site.Id.toLong(),
-                            Name = site.Name,
-                            LocationLatitude = site.LocationLatitude,
-                            Radius = site.Radius,
-                            LocationLongitude = site.LocationLongitude,
-                            Major = site.Major,
-                            IsBeaconRequired = site.IsBeaconRequired,
-                            timestamp = site.timestamp
-                        )
-                        )
-                        site.JobList.forEach {job->
-                            addJobList(job = Job(
-                                JobId = job.JobId.toLong(),
-                                JobName = job.JobName,
-                                SiteId = site.Id.toLong()
+                    response.ResponsePacket.forEach { site ->
+                        addSiteList(
+                            site = Site(
+                                Id = site.Id.toLong(),
+                                Name = site.Name,
+                                LocationLatitude = site.LocationLatitude,
+                                Radius = site.Radius,
+                                LocationLongitude = site.LocationLongitude,
+                                Major = site.Major,
+                                IsBeaconRequired = site.IsBeaconRequired,
+                                timestamp = site.timestamp
                             )
+                        )
+                        site.JobList.forEach { job ->
+                            addJobList(
+                                job = Job(
+                                    JobId = job.JobId.toLong(),
+                                    JobName = job.JobName,
+                                    SiteId = site.Id.toLong()
+                                )
                             )
                         }
                     }
@@ -128,30 +143,78 @@ class ApiManager @Inject constructor(
         }
     }
 
-    companion object {
-        @SuppressLint("EnqueueWork")
-        fun startPeriodicWork(context: Context) {
-            val constraints =
-                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+    fun fetchAndSaveEmployee() {
+        scope.launch(Dispatchers.IO) {
+            val employeeApiData = async { repository.postEmployee() }.await()
+            if (employeeApiData.data != null) {
+                val edHelper = com.allocate.ontime.encryption.EDHelper
+                if (employeeApiData.data?.isSuccessful == true) {
+                    val data = employeeApiData.data!!.body()?.data
+                    Log.d(TAG, "data of Employee : $data")
+                    val decryptedData = edHelper.decrypt(data.toString())
+                    Log.d(TAG, "decryptedData of Employee : $decryptedData")
+                    val response = Gson().fromJson(decryptedData, EmployeeResponse::class.java)
 
-            val periodicApiChain = PeriodicWorkRequestBuilder<WorkChainWorker>(
-                repeatInterval = 15, repeatIntervalTimeUnit = TimeUnit.MINUTES
-            ).setConstraints(constraints).build()
+                    Log.d(TAG, "response : ${Gson().toJson(response.employeeResponsePacket)}")
+                    val totalPagesSize = response.employeeResponsePacket.totalPagesSize
+                    SecureSharedPrefs(context).saveData(
+                        Constants.TOTAL_PAGES_SIZE, totalPagesSize.toString()
+                    )
 
-            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-                "ApiChainWorker", ExistingPeriodicWorkPolicy.KEEP, periodicApiChain
-            )
-
+                    response.employeeResponsePacket.lstEmployee.forEach() { employee ->
+                        addEmployee(
+                            employeePacket = EmployeePacket(
+                                iD = employee.id.toString(),
+                                fingerprint = employee.fingerprint,
+                                trustOrganization = employee.trustOrganization,
+                                allOffice = employee.isAllOffice,
+                                userName = employee.userName,
+                                updated = employee.updated.toInt(),
+                                firstName = employee.firstName,
+                                thumbprint = employee.thumbprint,
+                                employeeNumber = employee.employeeNumber,
+                                clintID = employee.clintID,
+                                faceData = employee.faceData,
+                                faceImage = employee.faceImage,
+                                timeClockPin = employee.timeClockPin,
+                                roleId = employee.roleId.toString(),
+                                totaleEmployee = employee.totalEmployee,
+                                lastName = employee.lastName,
+                                redius = employee.redius.toString(),
+                                RegistrationDate = employee.registrationDate,
+                                needSync = employee.needSync,
+                                registered = employee.isRegistered,
+                                IsSwipeAndGoEnabled = employee.swipeAndGo,
+                                fobVersion = employee.fobVersion,
+                                facialDevice = employee.isFacialDevice,
+                                deviceID = employee.deviceID.toString(),
+                                hasFob = employee.isFob,
+                                isLastPage = employee.isLastPage,
+                                timeClockIdentifier = employee.timeClockIdentifier
+                            )
+                        )
+                    }
+                }
+            } else {
+                Log.d(TAG, "employeeApiData.data is null")
+            }
         }
     }
 
     private suspend fun addSiteList(site: Site) =
         scope.launch(Dispatchers.IO) {
-           async { daoRepository.addSiteList(site) }.await()  }
+            async { daoRepository.addSiteList(site) }.await()
+        }
 
     private suspend fun addJobList(job: Job) =
         scope.launch(Dispatchers.IO) {
-           async { daoRepository.addJobList(job) }.await()  }
+            async { daoRepository.addJobList(job) }.await()
+        }
+
+    private suspend fun addEmployee(employeePacket: EmployeePacket) =
+        scope.launch(Dispatchers.IO) {
+            async { daoRepository.addEmployee(employeePacket) }.await()
+        }
 
     private suspend fun updateSiteList(site: Site) =
         scope.launch(Dispatchers.IO) { daoRepository.updateSiteList(site) }

@@ -11,7 +11,7 @@ data class EDModel(@SerializedName("data") var data: String) {
         return EDHelper.decrypt(data, clazz)
     }
 
-    fun encryptDeviceInfo(model: Any): EDModel {
+    fun encryptModel(model: Any): EDModel {
         var normalTextEnc: String? = ""
         try {
             val temp = Gson().toJson(model)

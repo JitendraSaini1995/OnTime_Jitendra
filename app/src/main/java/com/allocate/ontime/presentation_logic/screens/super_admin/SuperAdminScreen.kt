@@ -51,6 +51,7 @@ fun SuperAdminScreen(
     superAdminViewModel: SuperAdminViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
+    Log.d("jitu","Super Admin Screen")
 
     val hasNoUserInteractionSuperAdminScreen = superAdminViewModel.navigationFlow.collectAsState()
     Log.d(

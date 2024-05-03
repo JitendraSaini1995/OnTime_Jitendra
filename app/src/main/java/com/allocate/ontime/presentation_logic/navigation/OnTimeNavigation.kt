@@ -1,6 +1,9 @@
 package com.allocate.ontime.presentation_logic.navigation
 
 import android.util.Log
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -191,8 +194,10 @@ fun OnTimeNavigation() {
     }
 
     NavHost(
+        enterTransition = { fadeIn(animationSpec = tween(0)) },
+        exitTransition = { fadeOut(animationSpec = tween(0)) },
         navController = navController,
-        startDestination = OnTimeScreens.SplashScreen.name
+        startDestination = OnTimeScreens.HomeScreen.name
     ) {
         composable(OnTimeScreens.HomeScreen.name) {
             HomeScreen(homeScreenRoot = homeScreensRoot)

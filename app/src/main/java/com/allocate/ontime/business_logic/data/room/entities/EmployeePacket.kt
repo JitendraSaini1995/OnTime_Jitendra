@@ -86,6 +86,6 @@ data class EmployeePacket(
     @field:SerializedName("isLastPage")
     var isLastPage: Boolean? = false,
 
-    @field:SerializedName("IsDeleted")
-    var isDeleted: Boolean = false
+    @field:SerializedName("TimeClockIdentifier")
+    var timeClockIdentifier: String?
 )

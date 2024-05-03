@@ -3,6 +3,8 @@ package com.allocate.ontime.business_logic.data.room
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.allocate.ontime.business_logic.data.room.dao.DeviceInfoDao
+import com.allocate.ontime.business_logic.data.room.dao.EmployeeDao
+import com.allocate.ontime.business_logic.data.room.dao.MessageDao
 import com.allocate.ontime.business_logic.data.room.dao.SiteJobDao
 import com.allocate.ontime.business_logic.data.room.entities.DailyAnswer
 import com.allocate.ontime.business_logic.data.room.entities.DeviceInformation
@@ -24,4 +26,7 @@ import com.allocate.ontime.business_logic.data.room.entities.VisitorPacket
 abstract class OnTimeDatabase : RoomDatabase() {
     abstract fun deviceInfoDao(): DeviceInfoDao
     abstract fun siteJobDao(): SiteJobDao
+    abstract fun employeeDao(): EmployeeDao
+    abstract fun messageDao(): MessageDao
+
 }

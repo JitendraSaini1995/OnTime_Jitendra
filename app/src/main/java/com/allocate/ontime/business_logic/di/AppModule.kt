@@ -8,10 +8,14 @@ import com.allocate.ontime.business_logic.annotations.SuperAdminRetrofit
 import com.allocate.ontime.business_logic.api_manager.ApiManager
 import com.allocate.ontime.business_logic.data.room.dao.DeviceInfoDao
 import com.allocate.ontime.business_logic.data.room.OnTimeDatabase
+import com.allocate.ontime.business_logic.data.room.dao.EmployeeDao
+import com.allocate.ontime.business_logic.data.room.dao.MessageDao
 import com.allocate.ontime.business_logic.data.room.dao.SiteJobDao
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.network.DeviceInfoApi
 import com.allocate.ontime.business_logic.network.DeviceSettingApi
+import com.allocate.ontime.business_logic.network.EmployeeApi
+import com.allocate.ontime.business_logic.network.GetMessageApi
 import com.allocate.ontime.business_logic.network.SiteJobListApi
 import com.allocate.ontime.business_logic.network.SuperAdminApi
 import com.allocate.ontime.business_logic.repository.DaoRepository
@@ -42,6 +46,16 @@ object AppModule {
     @Provides
     fun provideSiteJobDaoRepository(database: OnTimeDatabase): SiteJobDao {
         return database.siteJobDao()
+    }
+
+    @Provides
+    fun provideEmployeeDaoRepository(database: OnTimeDatabase): EmployeeDao {
+        return database.employeeDao()
+    }
+
+    @Provides
+    fun provideMessageDaoRepository(database: OnTimeDatabase): MessageDao {
+        return database.messageDao()
     }
 
     @Provides
@@ -89,6 +103,18 @@ object AppModule {
     @Provides
     fun provideSiteJobListApi(@SuperAdminRetrofit retrofit: Retrofit): SiteJobListApi {
         return retrofit.create(SiteJobListApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEmployeeApi(@SuperAdminRetrofit retrofit: Retrofit): EmployeeApi {
+        return retrofit.create(EmployeeApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetMsgApi(@SuperAdminRetrofit retrofit: Retrofit): GetMessageApi {
+        return retrofit.create(GetMessageApi::class.java)
     }
 
     @Provides
