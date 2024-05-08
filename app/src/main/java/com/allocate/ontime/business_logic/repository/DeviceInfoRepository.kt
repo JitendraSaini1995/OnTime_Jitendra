@@ -147,7 +147,8 @@ class DeviceInfoRepository @Inject constructor(
     suspend fun postMessage(): DataOrException<Response<EDModel>, Exception> {
         val dataOrException = DataOrException<Response<EDModel>, Exception>()
 
-        val messageRequest = MessageRequest(timeStamp = "0",listUserRead = listOf(ListUserRead("","",true)))
+        val messageRequest =
+            MessageRequest(timeStamp = "0", listUserRead = listOf(ListUserRead("", "", true)))
         messageRequest.timeStamp = daoRepository.getMessageTimeStamp()
         val messages = daoRepository.getReadedMesseges(true)
         messageRequest.listUserRead = messages

@@ -3,12 +3,6 @@ package com.allocate.ontime.presentation_logic.screens.admin
 import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -63,7 +57,6 @@ fun AdminScreen(
     adminViewModel: AdminViewModel = hiltViewModel(),
 ) {
     val TAG = "AdminScreen"
-    Log.d("jitu","Admin Screen")
     var isDialogVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
     if (isDialogVisible) {
@@ -286,7 +279,6 @@ fun AdminScreen(
             }
         }
     }
-
 }
 
 

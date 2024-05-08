@@ -28,5 +28,4 @@ data class GetMessageResponsePacket(
 
     @SerializedName("TimeStamp")
     var timeStamp: String = "0"
-
 )

@@ -5,9 +5,10 @@ import androidx.room.Room
 import com.allocate.ontime.BuildConfig
 import com.allocate.ontime.business_logic.annotations.DeviceInfoRetrofit
 import com.allocate.ontime.business_logic.annotations.SuperAdminRetrofit
-import com.allocate.ontime.business_logic.api_manager.ApiManager
-import com.allocate.ontime.business_logic.data.room.dao.DeviceInfoDao
+import com.allocate.ontime.business_logic.api_manager.SyncManagerService
+import com.allocate.ontime.business_logic.api_manager.SyncManagerServiceImpl
 import com.allocate.ontime.business_logic.data.room.OnTimeDatabase
+import com.allocate.ontime.business_logic.data.room.dao.DeviceInfoDao
 import com.allocate.ontime.business_logic.data.room.dao.EmployeeDao
 import com.allocate.ontime.business_logic.data.room.dao.MessageDao
 import com.allocate.ontime.business_logic.data.room.dao.SiteJobDao
@@ -18,8 +19,6 @@ import com.allocate.ontime.business_logic.network.EmployeeApi
 import com.allocate.ontime.business_logic.network.GetMessageApi
 import com.allocate.ontime.business_logic.network.SiteJobListApi
 import com.allocate.ontime.business_logic.network.SuperAdminApi
-import com.allocate.ontime.business_logic.repository.DaoRepository
-import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
 import com.allocate.ontime.business_logic.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -65,12 +64,9 @@ object AppModule {
     }
 
     @Provides
-    fun provideApiManager(
-        repository: DeviceInfoRepository,
-        daoRepository: DaoRepository,
-        @ApplicationContext context: Context,
-        scope: CoroutineScope
-    ): ApiManager = ApiManager(repository,daoRepository,context, scope)
+    fun provideSyncManagerService(syncManagerServiceImpl: SyncManagerServiceImpl): SyncManagerService {
+        return syncManagerServiceImpl
+    }
 
     // It provides the dependency of OnTimeDatabase Class.
     @Singleton

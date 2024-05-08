@@ -1,7 +1,6 @@
 package com.allocate.ontime.presentation_logic.screens.home
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -42,18 +41,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.allocate.ontime.R
-import com.allocate.ontime.business_logic.api_worker.SuperAdminWorker
-import com.allocate.ontime.business_logic.api_worker.WorkChainWorker
+import com.allocate.ontime.business_logic.api_worker.ApiChainWorker
 import com.allocate.ontime.business_logic.utils.OnTimeColors
 import com.allocate.ontime.business_logic.viewmodel.splash.SplashViewModel
 import com.allocate.ontime.presentation_logic.navigation.HomeScreenRoot
 import com.allocate.ontime.presentation_logic.theme.dimens
 import com.allocate.ontime.presentation_logic.screens.login.PinEntryDialog
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -112,11 +107,7 @@ fun HomeScreen(
                 ) {
                     RadioButton(
                         selected = true,
-                        onClick = {
-                            WorkManager.getInstance(context).cancelUniqueWork("ApiChainWorker")
-                            splashViewModel.chainingApiCalling()
-                            WorkChainWorker.startPeriodicWork(context)
-                        },
+                        onClick = {},
                         colors = RadioButtonDefaults.colors(selectedColor = OnTimeColors.PORT_GORE)
                     )
                     Text(
@@ -127,7 +118,7 @@ fun HomeScreen(
                         modifier = Modifier.clickable {
                             WorkManager.getInstance(context).cancelUniqueWork("ApiChainWorker")
                             splashViewModel.chainingApiCalling()
-                            WorkChainWorker.startPeriodicWork(context)
+                            ApiChainWorker.startPeriodicWork(context)
                         }
                     )
                 }
@@ -281,7 +272,6 @@ fun HomeScreen(
             }
         }
     }
-
 }
 
 

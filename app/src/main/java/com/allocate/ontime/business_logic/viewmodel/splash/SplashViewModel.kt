@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.allocate.ontime.BuildConfig
-import com.allocate.ontime.business_logic.api_manager.ApiManager
+import com.allocate.ontime.business_logic.api_manager.SyncManagerServiceImpl
 import com.allocate.ontime.business_logic.data.DataOrException
 import com.allocate.ontime.business_logic.data.room.entities.DeviceInformation
 import com.allocate.ontime.business_logic.data.room.entities.EmployeePacket
@@ -17,8 +17,6 @@ import com.allocate.ontime.business_logic.utils.Constants
 import com.allocate.ontime.business_logic.utils.DeviceUtility
 import com.allocate.ontime.presentation_logic.model.AppInfo
 import com.allocate.ontime.presentation_logic.model.DeviceInfo
-import com.allocate.ontime.presentation_logic.model.EmployeeResponse
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +34,7 @@ class SplashViewModel @Inject constructor(
     private val repository: DeviceInfoRepository,
     private val daoRepository: DaoRepository,
     private val deviceUtility: DeviceUtility,
-    private val apiManager: ApiManager,
+    private val syncManagerServiceImpl: SyncManagerServiceImpl,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
@@ -53,9 +51,7 @@ class SplashViewModel @Inject constructor(
 
     fun chainingApiCalling() {
         viewModelScope.launch(Dispatchers.IO) {
-            async {
-                apiManager.startApiCalling()
-            }.await()
+                syncManagerServiceImpl.sync()
         }
     }
 
@@ -69,10 +65,6 @@ class SplashViewModel @Inject constructor(
                     Log.d(TAG, "Message Data : $data")
                     val decryptedData = edHelper.decrypt(data.toString())
                     Log.d(TAG, "decryptedData of Message : $decryptedData")
-//                    val response = Gson().fromJson(decryptedData, EmployeeResponse::class.java)
-//
-//                    Log.d(TAG, "response : ${Gson().toJson(response.employeeResponsePacket)}")
-
                 }
             } else {
                 Log.d(TAG, "employeeApiData.data is null")
@@ -180,11 +172,6 @@ class SplashViewModel @Inject constructor(
             }
         }
     }
-
-    private suspend fun addEmployee(employeePacket: EmployeePacket) =
-        viewModelScope.launch(Dispatchers.IO) {
-            async { daoRepository.addEmployee(employeePacket) }.await()
-        }
 
     private suspend fun addDeviceInfo(deviceInformation: DeviceInformation) =
         viewModelScope.launch(Dispatchers.IO) {

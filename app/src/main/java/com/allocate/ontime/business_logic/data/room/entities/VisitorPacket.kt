@@ -2,9 +2,8 @@ package com.allocate.ontime.business_logic.data.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
+
 
 @Entity(tableName = "VisitorPacket")
 data class VisitorPacket(

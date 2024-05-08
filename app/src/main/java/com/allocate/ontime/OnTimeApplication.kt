@@ -4,8 +4,7 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.allocate.ontime.business_logic.api_manager.ApiManager
-import com.allocate.ontime.business_logic.api_worker.WorkChainWorker
+import com.allocate.ontime.business_logic.api_worker.ApiChainWorker
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -21,6 +20,6 @@ class OnTimeApplication : Application() {
             this,
             Configuration.Builder().setWorkerFactory(hiltWorkerFactory).build()
         )
-        WorkChainWorker.startPeriodicWork(this)
+        ApiChainWorker.startPeriodicWork(this)
     }
 }

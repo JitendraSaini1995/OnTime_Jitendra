@@ -28,5 +28,4 @@ abstract class OnTimeDatabase : RoomDatabase() {
     abstract fun siteJobDao(): SiteJobDao
     abstract fun employeeDao(): EmployeeDao
     abstract fun messageDao(): MessageDao
-
 }

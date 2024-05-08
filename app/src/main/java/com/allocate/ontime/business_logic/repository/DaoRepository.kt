@@ -9,9 +9,7 @@ import com.allocate.ontime.business_logic.data.room.entities.Job
 import com.allocate.ontime.business_logic.data.room.entities.Site
 import com.allocate.ontime.business_logic.data.room.dao.SiteJobDao
 import com.allocate.ontime.business_logic.data.room.entities.EmployeePacket
-import com.allocate.ontime.business_logic.data.room.entities.GetMessageResponsePacket
 import com.allocate.ontime.business_logic.data.room.entities.ListUserRead
-import com.allocate.ontime.presentation_logic.model.Employee
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn
@@ -47,7 +45,7 @@ class DaoRepository @Inject constructor(
     fun getAllEmployee(): kotlinx.coroutines.flow.Flow<List<EmployeePacket>> =
         employeeDao.getEmployee().flowOn(Dispatchers.IO).conflate()
 
-     suspend fun getMessageTimeStamp(): String? =
+    suspend fun getMessageTimeStamp(): String? =
         messageDao.getMessageTimeStamp()
 
     suspend fun getReadedMesseges(needSync: Boolean): List<ListUserRead> =

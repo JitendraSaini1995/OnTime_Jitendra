@@ -25,18 +25,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.allocate.ontime.R
 import com.allocate.ontime.business_logic.utils.OnTimeColors
@@ -51,7 +48,7 @@ fun SuperAdminScreen(
     superAdminViewModel: SuperAdminViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
-    Log.d("jitu","Super Admin Screen")
+    Log.d("jitu", "Super Admin Screen")
 
     val hasNoUserInteractionSuperAdminScreen = superAdminViewModel.navigationFlow.collectAsState()
     Log.d(
