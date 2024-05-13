@@ -7,10 +7,7 @@ import com.allocate.ontime.business_logic.data.room.entities.Site
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.repository.DaoRepository
 import com.allocate.ontime.business_logic.utils.Constants
-import com.allocate.ontime.presentation_logic.model.DeviceSettingResponse
-import com.allocate.ontime.presentation_logic.model.EmployeeResponse
-import com.allocate.ontime.presentation_logic.model.SiteJobResponse
-import com.allocate.ontime.presentation_logic.model.SuperAdminResponse
+import com.allocate.ontime.presentation_logic.model.CombinedResponse
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -26,29 +23,28 @@ class OnTimeDatabaseManagerImpl @Inject constructor(
 
     private val TAG = "OnTimeDatabaseManagerImpl"
 
-    override fun syncSuperAdminDataInDb(superAdminResponse: SuperAdminResponse) {
+    override fun syncDataInDb(combinedResponse: CombinedResponse) {
+        combinedResponse.superAdminResponse?.ResponsePacket?.let {
+            SecureSharedPrefs(context).saveData(
+                Constants.USER_NAME, it.UserName
+            )
+        }
+        combinedResponse.superAdminResponse?.ResponsePacket?.let {
+            SecureSharedPrefs(context).saveData(
+                Constants.PASSWORD, it.Password
+            )
+        }
 
-        SecureSharedPrefs(context).saveData(
-            Constants.USER_NAME, superAdminResponse.ResponsePacket.UserName
-        )
-        SecureSharedPrefs(context).saveData(
-            Constants.PASSWORD, superAdminResponse.ResponsePacket.Password
-        )
-    }
-
-    override fun syncDeviceSettingDataInDb(deviceSettingResponse: DeviceSettingResponse) {
-        val deviceSettingJsonString = Gson().toJson(deviceSettingResponse)
-        val timeStamp = deviceSettingResponse.ResponsePacket.TimeStamp
+        val deviceSettingJsonString = Gson().toJson(combinedResponse.deviceSettingResponse)
+        val timeStamp = combinedResponse.deviceSettingResponse?.ResponsePacket?.TimeStamp
         SecureSharedPrefs(context).saveData(
             Constants.DEVICE_SETTING_DATA, deviceSettingJsonString
         )
         SecureSharedPrefs(context).saveData(
             Constants.TIME_STAMP, timeStamp.toString()
         )
-    }
 
-    override fun syncSiteJobDataInDb(siteJobResponse: SiteJobResponse) {
-        siteJobResponse.ResponsePacket.forEach { site ->
+        combinedResponse.siteJobResponse?.ResponsePacket?.forEach { site ->
             scope.launch(Dispatchers.IO) {
                 addSiteList(
                     site = Site(
@@ -73,14 +69,12 @@ class OnTimeDatabaseManagerImpl @Inject constructor(
                 }
             }
         }
-    }
 
-    override fun syncEmployeeDataInDb(employeeResponse: EmployeeResponse) {
-        val totalPagesSize = employeeResponse.employeeResponsePacket.totalPagesSize
+        val totalPagesSize = combinedResponse.employeeResponse?.employeeResponsePacket?.totalPagesSize
         SecureSharedPrefs(context).saveData(
             Constants.TOTAL_PAGES_SIZE, totalPagesSize.toString()
         )
-        employeeResponse.employeeResponsePacket.lstEmployee.forEach() { employee ->
+        combinedResponse.employeeResponse?.employeeResponsePacket?.lstEmployee?.forEach() { employee ->
             scope.launch(Dispatchers.IO) {
                 addEmployee(
                     employeePacket = EmployeePacket(

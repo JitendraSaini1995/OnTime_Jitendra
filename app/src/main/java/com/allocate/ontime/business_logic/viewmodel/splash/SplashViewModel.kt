@@ -9,7 +9,6 @@ import com.allocate.ontime.BuildConfig
 import com.allocate.ontime.business_logic.api_manager.SyncManagerServiceImpl
 import com.allocate.ontime.business_logic.data.DataOrException
 import com.allocate.ontime.business_logic.data.room.entities.DeviceInformation
-import com.allocate.ontime.business_logic.data.room.entities.EmployeePacket
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.repository.DaoRepository
 import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
@@ -17,6 +16,8 @@ import com.allocate.ontime.business_logic.utils.Constants
 import com.allocate.ontime.business_logic.utils.DeviceUtility
 import com.allocate.ontime.presentation_logic.model.AppInfo
 import com.allocate.ontime.presentation_logic.model.DeviceInfo
+import com.allocate.ontime.presentation_logic.model.GetMessageResponse
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -47,11 +48,12 @@ class SplashViewModel @Inject constructor(
 
     init {
         startApiCall()
+        sync()
     }
 
-    fun chainingApiCalling() {
+        fun sync() {
         viewModelScope.launch(Dispatchers.IO) {
-                syncManagerServiceImpl.sync()
+            syncManagerServiceImpl.sync()
         }
     }
 
@@ -65,6 +67,8 @@ class SplashViewModel @Inject constructor(
                     Log.d(TAG, "Message Data : $data")
                     val decryptedData = edHelper.decrypt(data.toString())
                     Log.d(TAG, "decryptedData of Message : $decryptedData")
+                    val response = Gson().fromJson(decryptedData, GetMessageResponse::class.java)
+                    Log.d(TAG, "response : $response")
                 }
             } else {
                 Log.d(TAG, "employeeApiData.data is null")

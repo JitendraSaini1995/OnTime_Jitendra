@@ -1,9 +1,9 @@
 package com.allocate.ontime.business_logic.api_manager
 
-import android.annotation.SuppressLint
 import android.util.Log
 import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
 import com.allocate.ontime.encryption.EDModel
+import com.allocate.ontime.presentation_logic.model.CombinedResponse
 import com.allocate.ontime.presentation_logic.model.DeviceSettingResponse
 import com.allocate.ontime.presentation_logic.model.EmployeeResponse
 import com.allocate.ontime.presentation_logic.model.SiteJobResponse
@@ -11,12 +11,10 @@ import com.allocate.ontime.presentation_logic.model.SuperAdminResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,36 +26,18 @@ class SyncManagerServiceImpl @Inject constructor(
 
     private val TAG = "SyncManagerServiceImpl"
 
-    @SuppressLint("SuspiciousIndentation")
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun sync() {
         scope.launch(Dispatchers.IO) {
-            val combinedFlow = listOf(
-                fetchSuperAdminDetails(),
-                fetchDeviceSettingDetails(),
-                fetchSiteJobList(),
-                fetchEmployeeList()
-            ).asFlow()
-                .flatMapMerge { value ->
-                    value
-                }.toList()
-            processCombinedResponse(combinedFlow)
-        }
-    }
-
-    private fun processCombinedResponse(responses: List<Any?>) {
-        for (response in responses) {
-            when (response) {
-                is SuperAdminResponse -> onTimeDatabaseManagerImpl.syncSuperAdminDataInDb(response)
-                is DeviceSettingResponse -> onTimeDatabaseManagerImpl.syncDeviceSettingDataInDb(
-                    response
-                )
-
-                is SiteJobResponse -> onTimeDatabaseManagerImpl.syncSiteJobDataInDb(response)
-                is EmployeeResponse -> onTimeDatabaseManagerImpl.syncEmployeeDataInDb(response)
-                else -> if (response != null) {
-                    throw IllegalArgumentException("Unknown response type: ${response.javaClass}")
-                }
+            val combinedResponse = CombinedResponse()
+            fetchSuperAdminDetails().zip(fetchDeviceSettingDetails()) { superAdminDetails, deviceSettingDetails ->
+                combinedResponse.superAdminResponse = superAdminDetails
+                combinedResponse.deviceSettingResponse = deviceSettingDetails
+            }.zip(fetchSiteJobList()) { _, siteJobList ->
+                combinedResponse.siteJobResponse = siteJobList
+            }.zip(fetchEmployeeList()) { _, employeeList ->
+                combinedResponse.employeeResponse = employeeList
+            }.collect {
+                onTimeDatabaseManagerImpl.syncDataInDb(combinedResponse)
             }
         }
     }
@@ -74,6 +54,9 @@ class SyncManagerServiceImpl @Inject constructor(
                 emit(null)
                 Log.d(TAG, "fetchSuperAdminDetails failed")
             }
+        }.catch { exception ->
+            emit(null)
+            Log.e(TAG, "Exception during fetchSuperAdminDetails: $exception")
         }
     }
 
@@ -88,6 +71,9 @@ class SyncManagerServiceImpl @Inject constructor(
             } else {
                 Log.d(TAG, "fetchDeviceSettingDetails failed")
             }
+        }.catch { exception ->
+            emit(null)
+            Log.e(TAG, "Exception during fetchDeviceSettingDetails: $exception")
         }
     }
 
@@ -102,6 +88,9 @@ class SyncManagerServiceImpl @Inject constructor(
             } else {
                 Log.d(TAG, "fetchSiteJobList failed")
             }
+        }.catch { exception ->
+            emit(null)
+            Log.e(TAG, "Exception during fetchSiteJobList: $exception")
         }
     }
 
@@ -116,6 +105,9 @@ class SyncManagerServiceImpl @Inject constructor(
             } else {
                 Log.d(TAG, "fetchEmployeeList failed")
             }
+        }.catch { exception ->
+            emit(null)
+            Log.e(TAG, "Exception during fetchEmployeeList: $exception")
         }
     }
 }

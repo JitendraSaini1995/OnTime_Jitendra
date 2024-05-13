@@ -117,7 +117,7 @@ fun HomeScreen(
                         color = OnTimeColors.PORT_GORE,
                         modifier = Modifier.clickable {
                             WorkManager.getInstance(context).cancelUniqueWork("ApiChainWorker")
-                            splashViewModel.chainingApiCalling()
+                            splashViewModel.sync()
                             ApiChainWorker.startPeriodicWork(context)
                         }
                     )

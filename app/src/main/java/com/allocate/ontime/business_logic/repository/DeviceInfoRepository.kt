@@ -19,7 +19,7 @@ import com.allocate.ontime.presentation_logic.model.AppInfo
 import com.allocate.ontime.presentation_logic.model.DeviceSettingInfo
 import com.allocate.ontime.presentation_logic.model.EditDeviceInfo
 import com.allocate.ontime.presentation_logic.model.EmployeeRequest
-import com.allocate.ontime.presentation_logic.model.MessageRequest
+import com.allocate.ontime.presentation_logic.model.GetMessageRequest
 import com.allocate.ontime.presentation_logic.model.SiteJobListRequest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.Response
@@ -147,18 +147,18 @@ class DeviceInfoRepository @Inject constructor(
     suspend fun postMessage(): DataOrException<Response<EDModel>, Exception> {
         val dataOrException = DataOrException<Response<EDModel>, Exception>()
 
-        val messageRequest =
-            MessageRequest(timeStamp = "0", listUserRead = listOf(ListUserRead("", "", true)))
-        messageRequest.timeStamp = daoRepository.getMessageTimeStamp()
+        val getMessageRequest =
+            GetMessageRequest(timeStamp = "0", listUserRead = listOf(ListUserRead("", "", true)))
+        getMessageRequest.timeStamp = daoRepository.getMessageTimeStamp()
         val messages = daoRepository.getReadedMesseges(true)
-        messageRequest.listUserRead = messages
+        getMessageRequest.listUserRead = messages
         val messegesIds = ArrayList<String?>()
         if (messages.isNotEmpty()) {
             for (element in messages) {
                 messegesIds.add(element.messageId)
             }
         }
-        val encryptedMsg = EDModel("").encryptModel(messageRequest)
+        val encryptedMsg = EDModel("").encryptModel(getMessageRequest)
         Log.i(TAG, "encryptedMsg : $encryptedMsg")
         try {
             dataOrException.data =
