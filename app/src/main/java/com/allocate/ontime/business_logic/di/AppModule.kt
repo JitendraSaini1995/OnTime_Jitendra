@@ -5,19 +5,29 @@ import androidx.room.Room
 import com.allocate.ontime.BuildConfig
 import com.allocate.ontime.business_logic.annotations.DeviceInfoRetrofit
 import com.allocate.ontime.business_logic.annotations.SuperAdminRetrofit
-import com.allocate.ontime.business_logic.data.room.DeviceInfoDao
+import com.allocate.ontime.business_logic.api_manager.SyncManagerService
+import com.allocate.ontime.business_logic.api_manager.SyncManagerServiceImpl
 import com.allocate.ontime.business_logic.data.room.OnTimeDatabase
+import com.allocate.ontime.business_logic.data.room.dao.DeviceInfoDao
+import com.allocate.ontime.business_logic.data.room.dao.EmployeeDao
+import com.allocate.ontime.business_logic.data.room.dao.MessageDao
+import com.allocate.ontime.business_logic.data.room.dao.SiteJobDao
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.network.DeviceInfoApi
+import com.allocate.ontime.business_logic.network.DeviceSettingApi
+import com.allocate.ontime.business_logic.network.EmployeeApi
+import com.allocate.ontime.business_logic.network.GetMessageApi
+import com.allocate.ontime.business_logic.network.SiteJobListApi
 import com.allocate.ontime.business_logic.network.SuperAdminApi
-import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
 import com.allocate.ontime.business_logic.utils.Constants
-import com.allocate.ontime.business_logic.viewmodel.MainViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -31,10 +41,32 @@ object AppModule {
     fun provideDeviceInfoDaoRepository(database: OnTimeDatabase): DeviceInfoDao {
         return database.deviceInfoDao()
     }
-    @Singleton
+
     @Provides
-    fun provideMainViewModel(repository: DeviceInfoRepository, @ApplicationContext context: Context): MainViewModel =
-        MainViewModel(repository, context)
+    fun provideSiteJobDaoRepository(database: OnTimeDatabase): SiteJobDao {
+        return database.siteJobDao()
+    }
+
+    @Provides
+    fun provideEmployeeDaoRepository(database: OnTimeDatabase): EmployeeDao {
+        return database.employeeDao()
+    }
+
+    @Provides
+    fun provideMessageDaoRepository(database: OnTimeDatabase): MessageDao {
+        return database.messageDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCoroutineScope(): CoroutineScope {
+        return CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    }
+
+    @Provides
+    fun provideSyncManagerService(syncManagerServiceImpl: SyncManagerServiceImpl): SyncManagerService {
+        return syncManagerServiceImpl
+    }
 
     // It provides the dependency of OnTimeDatabase Class.
     @Singleton
@@ -55,6 +87,30 @@ object AppModule {
     @Provides
     fun provideSuperAdminApi(@SuperAdminRetrofit retrofit: Retrofit): SuperAdminApi {
         return retrofit.create(SuperAdminApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeviceSettingApi(@SuperAdminRetrofit retrofit: Retrofit): DeviceSettingApi {
+        return retrofit.create(DeviceSettingApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSiteJobListApi(@SuperAdminRetrofit retrofit: Retrofit): SiteJobListApi {
+        return retrofit.create(SiteJobListApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEmployeeApi(@SuperAdminRetrofit retrofit: Retrofit): EmployeeApi {
+        return retrofit.create(EmployeeApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetMsgApi(@SuperAdminRetrofit retrofit: Retrofit): GetMessageApi {
+        return retrofit.create(GetMessageApi::class.java)
     }
 
     @Provides

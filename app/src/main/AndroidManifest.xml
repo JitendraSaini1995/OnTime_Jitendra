@@ -24,13 +24,15 @@
         android:testOnly="true"
         android:name=".OnTimeApplication"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        tools:ignore="ExtraText">
 
         <activity
             android:name=".MainActivity"
             android:screenOrientation="landscape"
             android:exported="true"
-            android:theme="@style/Theme.CI_OnTime">
+            android:theme="@style/Theme.CI_OnTime"
+            tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,6 +41,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
 
         <receiver
             android:name="com.allocate.ontime.MyDeviceAdminReceiver"

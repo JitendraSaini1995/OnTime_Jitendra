@@ -6,8 +6,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.allocate.ontime.BuildConfig
+import com.allocate.ontime.business_logic.api_manager.SyncManagerServiceImpl
 import com.allocate.ontime.business_logic.data.DataOrException
-import com.allocate.ontime.business_logic.data.room.DeviceInformation
+import com.allocate.ontime.business_logic.data.room.entities.DeviceInformation
 import com.allocate.ontime.business_logic.data.shared_preferences.SecureSharedPrefs
 import com.allocate.ontime.business_logic.repository.DaoRepository
 import com.allocate.ontime.business_logic.repository.DeviceInfoRepository
@@ -15,6 +16,8 @@ import com.allocate.ontime.business_logic.utils.Constants
 import com.allocate.ontime.business_logic.utils.DeviceUtility
 import com.allocate.ontime.presentation_logic.model.AppInfo
 import com.allocate.ontime.presentation_logic.model.DeviceInfo
+import com.allocate.ontime.presentation_logic.model.GetMessageResponse
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -32,17 +35,46 @@ class SplashViewModel @Inject constructor(
     private val repository: DeviceInfoRepository,
     private val daoRepository: DaoRepository,
     private val deviceUtility: DeviceUtility,
+    private val syncManagerServiceImpl: SyncManagerServiceImpl,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     private val _acknowledgementStatus = MutableStateFlow(0)
     val acknowledgementStatus = _acknowledgementStatus.asStateFlow()
+
     companion object {
         const val TAG = "SplashViewModel"
     }
 
     init {
+        startApiCall()
+        sync()
+    }
+
+        fun sync() {
         viewModelScope.launch(Dispatchers.IO) {
+            syncManagerServiceImpl.sync()
+        }
+    }
+
+    private fun startApiCall() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val messageApiData = async { repository.postMessage() }.await()
+            if (messageApiData.data != null) {
+                val edHelper = com.allocate.ontime.encryption.EDHelper
+                if (messageApiData.data?.isSuccessful == true) {
+                    val data = messageApiData.data!!.body()?.data
+                    Log.d(TAG, "Message Data : $data")
+                    val decryptedData = edHelper.decrypt(data.toString())
+                    Log.d(TAG, "decryptedData of Message : $decryptedData")
+                    val response = Gson().fromJson(decryptedData, GetMessageResponse::class.java)
+                    Log.d(TAG, "response : $response")
+                }
+            } else {
+                Log.d(TAG, "employeeApiData.data is null")
+            }
+
+
             val deviceInfoApiData = async { repository.getDeviceInfo(context) }.await()
             Log.i(TAG, "deviceInfoApiData : success")
 
@@ -50,6 +82,10 @@ class SplashViewModel @Inject constructor(
                 SecureSharedPrefs(context).saveData(
                     Constants.AS_API_URL,
                     data.ASApiURL
+                )
+                SecureSharedPrefs(context).saveData(
+                    Constants.DEVICE_ID,
+                    data.DeviceId.toString()
                 )
                 addDeviceInfo(
                     deviceInformation = DeviceInformation(
@@ -142,8 +178,12 @@ class SplashViewModel @Inject constructor(
     }
 
     private suspend fun addDeviceInfo(deviceInformation: DeviceInformation) =
-        viewModelScope.launch(Dispatchers.IO) { daoRepository.addDeviceInfo(deviceInformation) }
+        viewModelScope.launch(Dispatchers.IO) {
+            async { daoRepository.addDeviceInfo(deviceInformation) }.await()
+        }
 
     private suspend fun updateDeviceInfo(deviceInformation: DeviceInformation) =
-        viewModelScope.launch(Dispatchers.IO) { daoRepository.updateDeviceInfo(deviceInformation) }
+        viewModelScope.launch(Dispatchers.IO) {
+            async { daoRepository.updateDeviceInfo(deviceInformation) }.await()
+        }
 }
