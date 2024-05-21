@@ -98,9 +98,6 @@ fun AdminRegistrationScreen(
                 fontWeight = FontWeight.Bold
             )
             InputField(
-                valueState = searchState,
-                labelId = stringResource(id = R.string.Search_Employee),
-                isSingleLine = true,
                 modifier = Modifier
                     .size(
                         width = MaterialTheme.dimens.adminRegScrSearchTxtFieldW,
@@ -108,6 +105,9 @@ fun AdminRegistrationScreen(
                     )
                     .align(alignment = Alignment.End)
                     .padding(end = MaterialTheme.dimens.adminRegScrSearchTxtFieldEndPad),
+                valueState = searchState,
+                labelId = stringResource(id = R.string.Search_Employee),
+                isSingleLine = true,
                 textStyle = MaterialTheme.typography.titleMedium,
             )
             Spacer(
@@ -145,36 +145,36 @@ fun AdminRegistrationScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             InputField(
+                                modifier = Modifier
+                                    .size(
+                                        width = MaterialTheme.dimens.userInTxtFieldW,
+                                        height = MaterialTheme.dimens.userInTxtFieldH
+                                    ),
                                 valueState = searchState,
                                 labelId = stringResource(id = R.string.First_Name),
                                 isSingleLine = true,
+                                textStyle = MaterialTheme.typography.titleMedium
+                            )
+                            InputField(
                                 modifier = Modifier
                                     .size(
                                         width = MaterialTheme.dimens.userInTxtFieldW,
                                         height = MaterialTheme.dimens.userInTxtFieldH
                                     ),
-                                textStyle = MaterialTheme.typography.titleMedium
-                            )
-                            InputField(
                                 valueState = searchState,
                                 labelId = stringResource(id = R.string.Last_Name),
                                 isSingleLine = true,
-                                modifier = Modifier
-                                    .size(
-                                        width = MaterialTheme.dimens.userInTxtFieldW,
-                                        height = MaterialTheme.dimens.userInTxtFieldH
-                                    ),
                                 textStyle = MaterialTheme.typography.titleMedium
                             )
                             InputField(
-                                valueState = searchState,
-                                labelId = stringResource(id = R.string.Employee_Number),
-                                isSingleLine = true,
                                 modifier = Modifier
                                     .size(
                                         width = MaterialTheme.dimens.userInTxtFieldW,
                                         height = MaterialTheme.dimens.userInTxtFieldH
                                     ),
+                                valueState = searchState,
+                                labelId = stringResource(id = R.string.Employee_Number),
+                                isSingleLine = true,
                                 textStyle = MaterialTheme.typography.titleMedium
                             )
                         }
@@ -205,15 +205,15 @@ fun AdminRegistrationScreen(
                             ) {
 
                                 InputField(
-                                    valueState = searchState,
-                                    labelId = stringResource(id = R.string.Fingerprint_One),
-                                    isSingleLine = true,
                                     modifier = Modifier
                                         .size(
                                             width = MaterialTheme.dimens.fingerprintInTxtFieldW,
                                             height = MaterialTheme.dimens.fingerprintInTxtFieldH
                                         ),
                                     isTrailingIcon = true,
+                                    valueState = searchState,
+                                    labelId = stringResource(id = R.string.Fingerprint_One),
+                                    isSingleLine = true,
                                     textStyle = MaterialTheme.typography.titleMedium
                                 )
                                 Image(
@@ -227,15 +227,15 @@ fun AdminRegistrationScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 InputField(
-                                    valueState = searchState,
-                                    labelId = stringResource(id = R.string.Fingerprint_Two),
-                                    isSingleLine = true,
                                     modifier = Modifier
                                         .size(
                                             width = MaterialTheme.dimens.fingerprintInTxtFieldW,
                                             height = MaterialTheme.dimens.fingerprintInTxtFieldH
                                         ),
                                     isTrailingIcon = true,
+                                    valueState = searchState,
+                                    labelId = stringResource(id = R.string.Fingerprint_Two),
+                                    isSingleLine = true,
                                     textStyle = MaterialTheme.typography.titleMedium
                                 )
                                 Image(

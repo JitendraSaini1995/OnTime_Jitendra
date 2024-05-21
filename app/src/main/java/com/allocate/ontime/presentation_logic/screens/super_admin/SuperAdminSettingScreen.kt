@@ -305,14 +305,14 @@ private fun SuperAdminSettingInfo(
                     modifier = Modifier.padding(start = MaterialTheme.dimens.superAdminSettingScrColStartPad)
                 )
                 InputField(
-                    valueState = trustState,
-                    labelId = "",
-                    enabled = false,
-                    isSingleLine = true,
                     modifier = Modifier.size(
                         width = MaterialTheme.dimens.superAdminSettingScrTxtFieldsW,
                         height = MaterialTheme.dimens.superAdminSettingScrTxtFieldsH
                     ),
+                    valueState = trustState,
+                    labelId = "",
+                    enabled = false,
+                    isSingleLine = true,
                     textStyle = MaterialTheme.typography.titleMedium
                 )
                 Text(
@@ -321,14 +321,14 @@ private fun SuperAdminSettingInfo(
                     modifier = Modifier.padding(start = MaterialTheme.dimens.superAdminSettingScrColStartPad)
                 )
                 InputField(
-                    valueState = locationState,
-                    labelId = "",
-                    enabled = false,
-                    isSingleLine = true,
                     modifier = Modifier.size(
                         width = MaterialTheme.dimens.superAdminSettingScrTxtFieldsW,
                         height = MaterialTheme.dimens.superAdminSettingScrTxtFieldsH
                     ),
+                    valueState = locationState,
+                    labelId = "",
+                    enabled = false,
+                    isSingleLine = true,
                     textStyle = MaterialTheme.typography.titleMedium
                 )
                 Text(
@@ -337,14 +337,14 @@ private fun SuperAdminSettingInfo(
                     modifier = Modifier.padding(start = MaterialTheme.dimens.superAdminSettingScrColStartPad)
                 )
                 InputField(
-                    valueState = postCodeState,
-                    labelId = "",
-                    enabled = false,
-                    isSingleLine = true,
                     modifier = Modifier.size(
                         width = MaterialTheme.dimens.superAdminSettingScrTxtFieldsW,
                         height = MaterialTheme.dimens.superAdminSettingScrTxtFieldsH
                     ),
+                    valueState = postCodeState,
+                    labelId = "",
+                    enabled = false,
+                    isSingleLine = true,
                     textStyle = MaterialTheme.typography.titleMedium
                 )
             }
@@ -358,14 +358,14 @@ private fun SuperAdminSettingInfo(
                     modifier = Modifier.padding(start = MaterialTheme.dimens.superAdminSettingScrColStartPad)
                 )
                 InputField(
-                    valueState = uniqueIdentifierState,
-                    labelId = "",
-                    enabled = false,
-                    isSingleLine = true,
                     modifier = Modifier.size(
                         width = MaterialTheme.dimens.superAdminSettingScrTxtFieldsW,
                         height = MaterialTheme.dimens.superAdminSettingScrTxtFieldsH
                     ),
+                    valueState = uniqueIdentifierState,
+                    labelId = "",
+                    enabled = false,
+                    isSingleLine = true,
                     textStyle = MaterialTheme.typography.titleMedium
                 )
                 Text(
@@ -374,14 +374,14 @@ private fun SuperAdminSettingInfo(
                     modifier = Modifier.padding(start = MaterialTheme.dimens.superAdminSettingScrColStartPad)
                 )
                 InputField(
-                    valueState = latLngState,
-                    labelId = "",
-                    enabled = false,
-                    isSingleLine = true,
                     modifier = Modifier.size(
                         width = MaterialTheme.dimens.superAdminSettingScrTxtFieldsW,
                         height = MaterialTheme.dimens.superAdminSettingScrTxtFieldsH
                     ),
+                    valueState = latLngState,
+                    labelId = "",
+                    enabled = false,
+                    isSingleLine = true,
                     textStyle = MaterialTheme.typography.titleMedium
                 )
                 Text(
@@ -392,16 +392,16 @@ private fun SuperAdminSettingInfo(
                         .alpha(if (isRLD.value) 0f else 1f)
                 )
                 InputField(
-                    valueState = siteNameState,
-                    labelId = "",
-                    enabled = false,
-                    isSingleLine = true,
                     modifier = Modifier
                         .size(
                             width = MaterialTheme.dimens.superAdminSettingScrTxtFieldsW,
                             height = MaterialTheme.dimens.superAdminSettingScrTxtFieldsH
                         )
                         .alpha(if (isRLD.value) 0f else 1f),
+                    valueState = siteNameState,
+                    labelId = "",
+                    enabled = false,
+                    isSingleLine = true,
                     textStyle = MaterialTheme.typography.titleMedium
                 )
             }

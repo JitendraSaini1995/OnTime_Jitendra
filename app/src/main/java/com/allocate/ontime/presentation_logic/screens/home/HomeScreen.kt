@@ -59,7 +59,7 @@ import java.util.Locale
 fun HomeScreen(
     homeScreenRoot: (HomeScreenRoot) -> Unit,
     splashViewModel: SplashViewModel = hiltViewModel(),
-) {
+){
     fun getCurrentTime(): String {
         val currentTime = Calendar.getInstance().time
         val dateFormat = SimpleDateFormat("h:mm a", Locale.getDefault())

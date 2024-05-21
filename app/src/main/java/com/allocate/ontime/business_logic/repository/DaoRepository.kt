@@ -45,6 +45,8 @@ class DaoRepository @Inject constructor(
     fun getAllEmployee(): kotlinx.coroutines.flow.Flow<List<EmployeePacket>> =
         employeeDao.getEmployee().flowOn(Dispatchers.IO).conflate()
 
+    fun searchEmployee(query : String): kotlinx.coroutines.flow.Flow<List<EmployeePacket>> =
+        employeeDao.searchEmployees(query).flowOn(Dispatchers.IO).conflate()
     suspend fun getMessageTimeStamp(): String? =
         messageDao.getMessageTimeStamp()
 

@@ -1,6 +1,8 @@
 package com.allocate.ontime.presentation_logic.navigation
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -20,6 +22,7 @@ import com.allocate.ontime.presentation_logic.screens.home.HomeScreen
 import com.allocate.ontime.presentation_logic.screens.super_admin.SuperAdminScreen
 import com.allocate.ontime.presentation_logic.screens.super_admin.SuperAdminSettingScreen
 import com.allocate.ontime.presentation_logic.screens.splash.SplashScreen
+import com.allocate.ontime.presentation_logic.screens.super_admin.FobImageScreen
 import com.allocate.ontime.presentation_logic.screens.super_admin.VisitorRegistrationScreen
 
 
@@ -136,6 +139,7 @@ import com.allocate.ontime.presentation_logic.screens.super_admin.VisitorRegistr
 //    }
 //}
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @ExperimentalComposeUiApi
 @Composable
 fun OnTimeNavigation() {
@@ -189,6 +193,10 @@ fun OnTimeNavigation() {
                 SuperAdminScreenRoot.SuperAdminScreen -> navController.popUpTo(
                     OnTimeScreens.SuperAdminScreen.name
                 )
+
+                SuperAdminScreenRoot.FobImageScreen -> navController.popUpTo(
+                    OnTimeScreens.FobImageScreen.name
+                )
             }
         }
     }
@@ -222,6 +230,9 @@ fun OnTimeNavigation() {
         }
         composable(OnTimeScreens.SplashScreen.name) {
             SplashScreen(homeScreenRoot = homeScreensRoot)
+        }
+        composable(OnTimeScreens.FobImageScreen.name) {
+            FobImageScreen(superAdminScreenRoot = superAdminScreenRoot)
         }
     }
 }

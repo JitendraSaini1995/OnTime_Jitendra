@@ -1,36 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.allocate.ontime"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="CoarseFineLocation">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name = "android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS"
+    package="com.allocate.ontime"
+    tools:ignore="CoarseFineLocation,ExtraText">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission
+        android:name="android.permission.LOCAL_MAC_ADDRESS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.NFC" />
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
 
     <application
+        android:name=".OnTimeApplication"
         android:allowBackup="true"
-        android:vmSafeMode="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CI_OnTime"
         android:testOnly="true"
-        android:name=".OnTimeApplication"
+        android:theme="@style/Theme.CI_OnTime"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31"
-        tools:ignore="ExtraText">
+        android:vmSafeMode="true"
+        tools:ignore="ExtraText"
+        tools:targetApi="31">
+<!--        <activity-->
+<!--            android:name=".business_logic.nfc.NfcReadActivity"-->
+<!--            android:exported="false"-->
+<!--            android:label="@string/title_activity_nfc_readactivity"-->
+<!--            android:theme="@style/Theme.CI_OnTime">-->
 
+<!--            <intent-filter>-->
+<!--                <action android:name="android.nfc.action.NDEF_DISCOVERED" />-->
+
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+
+<!--                <data android:mimeType="text/plain" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
+<!--        <activity-->
+<!--            android:name=".business_logic.nfc.NfcWriteActivity"-->
+<!--            android:exported="false"-->
+<!--            android:label="@string/title_activity_nfc_write"-->
+<!--            android:theme="@style/Theme.CI_OnTime">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.nfc.action.NDEF_DISCOVERED" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+
+<!--                <data android:mimeType="text/plain" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="landscape"
+            android:launchMode="singleInstancePerTask"
             android:exported="true"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.CI_OnTime"
             tools:ignore="DiscouragedApi">
             <intent-filter>
@@ -39,6 +74,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
 
@@ -53,7 +95,7 @@
         </provider>
 
         <receiver
-            android:name="com.allocate.ontime.MyDeviceAdminReceiver"
+            android:name=".MyDeviceAdminReceiver"
             android:description="@string/app_name"
             android:exported="true"
             android:label="@string/app_name"
@@ -61,6 +103,7 @@
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/device_admin_receiver" />
+
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>

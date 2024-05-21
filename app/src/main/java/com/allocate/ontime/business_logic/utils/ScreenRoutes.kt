@@ -9,4 +9,5 @@ object ScreenRoutes {
     const val FOB_REGISTER_SCREEN = "FobRegisterScreen"
     const val SUPER_ADMIN_SETTING_SCREEN = "SuperAdminSettingScreen"
     const val VISITOR_REGISTRATION_SCREEN = "VisitorRegistrationScreen"
+    const val FOB_IMAGE_SCREEN = "FobImageScreen"
 }

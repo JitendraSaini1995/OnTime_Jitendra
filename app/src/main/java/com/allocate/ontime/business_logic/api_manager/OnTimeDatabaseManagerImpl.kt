@@ -118,6 +118,12 @@ class OnTimeDatabaseManagerImpl @Inject constructor(
     private suspend fun addEmployee(employeePacket: EmployeePacket) =
         daoRepository.addEmployee(employeePacket)
 
+    fun getEmployee() =
+        daoRepository.getAllEmployee()
+
+    fun searchEmployee(query : String) =
+        daoRepository.searchEmployee(query)
+
 //    private suspend fun updateSiteList(site: Site) =
 //        scope.launch(Dispatchers.IO) { daoRepository.updateSiteList(site) }
 //

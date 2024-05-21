@@ -18,7 +18,7 @@ class AutoBackNavigationManager @Inject constructor() {
     private val navigationFlowInternal = MutableStateFlow(false)
     var navigationFlow = navigationFlowInternal.asStateFlow()
     private var timeoutJob: Job? = null
-    private val TIMEOUT_DURATION_MS = 10000L
+    private val TIMEOUT_DURATION_MS = 60000L
 
     fun addOrUpdateScreens(screen: String) {
         navigateScreens[screen] = System.currentTimeMillis()

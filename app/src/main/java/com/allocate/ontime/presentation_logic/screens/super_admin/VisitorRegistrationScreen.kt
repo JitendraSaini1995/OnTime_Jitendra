@@ -110,95 +110,95 @@ fun VisitorRegistrationScreen(backToSuperAdminScreen: (SuperAdminScreenRoot) -> 
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             InputField(
+                                modifier = Modifier
+                                    .size(
+                                        width = MaterialTheme.dimens.userInTxtFieldW,
+                                        height = MaterialTheme.dimens.userInTxtFieldH
+                                    ),
                                 valueState = searchVisitor,
                                 labelId = stringResource(id = R.string.Search_Visitor),
                                 isSingleLine = true,
-                                modifier = Modifier
-                                    .size(
-                                        width = MaterialTheme.dimens.userInTxtFieldW,
-                                        height = MaterialTheme.dimens.userInTxtFieldH
-                                    ),
                                 textStyle = MaterialTheme.typography.titleMedium
                             )
                             Row {
                                 InputField(
+                                    modifier = Modifier
+                                        .size(
+                                            width = MaterialTheme.dimens.visitorRegScrInputFieldWidth,
+                                            height = MaterialTheme.dimens.userInTxtFieldH
+                                        ),
                                     valueState = firstName,
                                     labelId = stringResource(id = R.string.First_Name),
                                     isSingleLine = true,
-                                    modifier = Modifier
-                                        .size(
-                                            width = MaterialTheme.dimens.visitorRegScrInputFieldWidth,
-                                            height = MaterialTheme.dimens.userInTxtFieldH
-                                        ),
                                     textStyle = MaterialTheme.typography.titleMedium
                                 )
                                 InputField(
-                                    valueState = lastName,
-                                    labelId = stringResource(id = R.string.Last_Name),
-                                    isSingleLine = true,
                                     modifier = Modifier
                                         .size(
                                             width = MaterialTheme.dimens.visitorRegScrInputFieldWidth,
                                             height = MaterialTheme.dimens.userInTxtFieldH
                                         ),
+                                    valueState = lastName,
+                                    labelId = stringResource(id = R.string.Last_Name),
+                                    isSingleLine = true,
                                     textStyle = MaterialTheme.typography.titleMedium
                                 )
                             }
                             Row {
                                 InputField(
+                                    modifier = Modifier
+                                        .size(
+                                            width = MaterialTheme.dimens.visitorRegScrInputFieldWidth,
+                                            height = MaterialTheme.dimens.userInTxtFieldH
+                                        ),
                                     valueState = companyName,
                                     labelId = stringResource(id = R.string.Company_name),
                                     isSingleLine = true,
-                                    modifier = Modifier
-                                        .size(
-                                            width = MaterialTheme.dimens.visitorRegScrInputFieldWidth,
-                                            height = MaterialTheme.dimens.userInTxtFieldH
-                                        ),
                                     textStyle = MaterialTheme.typography.titleMedium
                                 )
                                 InputField(
-                                    valueState = visitingPerson,
-                                    labelId = stringResource(id = R.string.Visiting_person),
-                                    isSingleLine = true,
                                     modifier = Modifier
                                         .size(
                                             width = MaterialTheme.dimens.visitorRegScrInputFieldWidth,
                                             height = MaterialTheme.dimens.userInTxtFieldH
                                         ),
+                                    valueState = visitingPerson,
+                                    labelId = stringResource(id = R.string.Visiting_person),
+                                    isSingleLine = true,
                                     textStyle = MaterialTheme.typography.titleMedium
                                 )
                             }
                             InputField(
+                                modifier = Modifier
+                                    .size(
+                                        width = MaterialTheme.dimens.userInTxtFieldW,
+                                        height = MaterialTheme.dimens.userInTxtFieldH
+                                    ),
                                 valueState = phoneNumber,
                                 labelId = stringResource(id = R.string.Phone_number),
                                 isSingleLine = true,
+                                textStyle = MaterialTheme.typography.titleMedium
+                            )
+                            InputField(
                                 modifier = Modifier
                                     .size(
                                         width = MaterialTheme.dimens.userInTxtFieldW,
                                         height = MaterialTheme.dimens.userInTxtFieldH
                                     ),
-                                textStyle = MaterialTheme.typography.titleMedium
-                            )
-                            InputField(
                                 valueState = vehicleRegistration,
                                 labelId = stringResource(id = R.string.Vehicle_Registration),
                                 isSingleLine = true,
-                                modifier = Modifier
-                                    .size(
-                                        width = MaterialTheme.dimens.userInTxtFieldW,
-                                        height = MaterialTheme.dimens.userInTxtFieldH
-                                    ),
                                 textStyle = MaterialTheme.typography.titleMedium
                             )
                             InputField(
-                                valueState = reason,
-                                labelId = stringResource(id = R.string.Reason),
-                                isSingleLine = false,
                                 modifier = Modifier
                                     .size(
                                         width = MaterialTheme.dimens.userInTxtFieldW,
                                         height = MaterialTheme.dimens.visitorRegScrReasonInputFieldWidth
                                     ),
+                                valueState = reason,
+                                labelId = stringResource(id = R.string.Reason),
+                                isSingleLine = false,
                                 textStyle = MaterialTheme.typography.titleMedium
                             )
 
@@ -222,15 +222,15 @@ fun VisitorRegistrationScreen(backToSuperAdminScreen: (SuperAdminScreenRoot) -> 
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             InputField(
-                                valueState = searchState,
-                                labelId = stringResource(id = R.string.Fingerprint_One),
-                                isSingleLine = true,
                                 modifier = Modifier
                                     .size(
                                         width = MaterialTheme.dimens.fingerprintInTxtFieldW,
                                         height = MaterialTheme.dimens.fingerprintInTxtFieldH
                                     ),
                                 isTrailingIcon = true,
+                                valueState = searchState,
+                                labelId = stringResource(id = R.string.Fingerprint_One),
+                                isSingleLine = true,
                                 textStyle = MaterialTheme.typography.titleMedium
                             )
                             Image(

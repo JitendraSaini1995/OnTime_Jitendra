@@ -11,6 +11,7 @@ sealed class OnTimeScreens(val name: String) {
     object FobRegisterScreen : OnTimeScreens(ScreenRoutes.FOB_REGISTER_SCREEN)
     object SuperAdminSettingScreen : OnTimeScreens(ScreenRoutes.SUPER_ADMIN_SETTING_SCREEN)
     object VisitorRegistrationScreen : OnTimeScreens(ScreenRoutes.VISITOR_REGISTRATION_SCREEN)
+    object FobImageScreen : OnTimeScreens(ScreenRoutes.FOB_IMAGE_SCREEN)
 
 }
 
@@ -27,4 +28,5 @@ sealed class SuperAdminScreenRoot {
     object FobRegisterScreen : SuperAdminScreenRoot()
     object SuperAdminSettingScreen : SuperAdminScreenRoot()
     object SuperAdminScreen : SuperAdminScreenRoot()
+    object FobImageScreen : SuperAdminScreenRoot()
 }

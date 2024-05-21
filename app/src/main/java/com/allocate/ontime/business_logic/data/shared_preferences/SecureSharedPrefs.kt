@@ -3,6 +3,7 @@ package com.allocate.ontime.business_logic.data.shared_preferences
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 class SecureSharedPrefs(context: Context) {
 

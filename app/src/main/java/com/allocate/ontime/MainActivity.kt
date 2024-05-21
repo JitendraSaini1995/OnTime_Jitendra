@@ -1,17 +1,8 @@
 package com.allocate.ontime
 
 import android.annotation.SuppressLint
-import android.app.admin.DevicePolicyManager
-import android.app.admin.SystemUpdatePolicy
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.os.BatteryManager
 import android.os.Bundle
-import android.os.UserManager
-import android.provider.Settings
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import com.allocate.ontime.business_logic.nfc.NfcManager
 import com.allocate.ontime.presentation_logic.navigation.OnTimeNavigation
 import com.allocate.ontime.presentation_logic.theme.OnTimeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private lateinit var nfcManager: NfcManager
 
 //    private lateinit var mAdminComponentName: ComponentName
 //    private lateinit var mDevicePolicyManager: DevicePolicyManager
@@ -38,10 +31,19 @@ class MainActivity : ComponentActivity() {
         const val LOCK_ACTIVITY_KEY = "com.allocate.ontime.MainActivity"
     }
 
-
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val employeeData = intent.getStringExtra("employeeData")
+
+      nfcManager = NfcManager(this)
+        nfcManager.messageToWrite = employeeData
+
+        if (nfcManager.nfcAdapter == null) {
+            finish()
+            return
+        }
+
         setContent {
             OnTimeApp()
         }
@@ -65,6 +67,22 @@ class MainActivity : ComponentActivity() {
 ////            startActivity(intent)
 //        }
     }
+
+    override fun onResume() {
+        super.onResume()
+        nfcManager.enableForegroundDispatch()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        nfcManager.disableForegroundDispatch()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        nfcManager.handleNfcIntent(intent)
+    }
+
 
 //    private fun isAdmin() = mDevicePolicyManager.isDeviceOwnerApp(packageName)
 //

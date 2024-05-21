@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">CI_OnTime</string>
 
     // Admin Screen
@@ -43,6 +43,7 @@
     <string name="Please_scan_QR_Code_for_instructional_video_on_Finger_Scan_registrations">Please
                  scan QR Code for instructional video on Finger Scan \nregistrations</string>
     <string name="Click_here_to_go_back">Click here to go back</string>
+    <string name="Ready">Ready</string>
     <string name="circle_black_img">circle_black_img</string>
     <string name="circle_green_img">circle_green_img</string>
 
@@ -101,4 +102,13 @@
     <string name="Clock_in">Clock in</string>
     <string name="Clock_out">Clock out</string>
     <string name="Register_and_make_event">Register and make event</string>
+    <string name="title_activity_nfc_write">NfcWriteActivity</string>
+    <string name="title_activity_nfc_readactivity">NfcReadactivity</string>
+
+    // FobImageScreen
+    <string name="Ready_To_Connect">Ready To Connect</string>
+    <string name="Touch_And_Hold_NFC_Tag_Near_Device">Touch &amp; Hold NFC Tag Near Device</string>
+    <string name="CANCEL" tools:ignore="ButtonCase">CANCEL</string>
+
+    <string name="enter_radius">Please enter radius</string>
 </resources>
